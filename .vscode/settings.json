@@ -2,5 +2,19 @@
     "cSpell.enabled": false,
     "files.exclude": {
         "build/": true
-    }
+    },
+    "files.associations": {
+        "__assert__.h": "c",
+        "stm8s.h": "c",
+        "gpio.h": "c",
+        "stm8s_conf.h": "c",
+        "stm8s_it.h": "c",
+        "stdlib.h": "c",
+        "stdio.h": "c",
+        "time.h": "c",
+        "windows.h": "c",
+        "dos.h": "c",
+        "stm8s_adc1.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
 }

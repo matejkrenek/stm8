@@ -56,7 +56,7 @@ void GPIO_DeInit(GPIO_TypeDef* GPIOx)
   GPIOx->DDR = GPIO_DDR_RESET_VALUE; /* Reset Data Direction Register */
   GPIOx->CR1 = GPIO_CR1_RESET_VALUE; /* Reset Control Register 1 */
   GPIOx->CR2 = GPIO_CR2_RESET_VALUE; /* Reset Control Register 2 */
-}
+} 
 
 /**
   * @brief  Initializes the GPIOx according to the specified parameters.
