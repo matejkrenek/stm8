@@ -61,72 +61,73 @@ void GPIO_DeInit(GPIO_TypeDef* GPIOx)
 /**
   * @brief  Initializes the GPIOx according to the specified parameters.
   * @param  GPIOx : Select the GPIO peripheral number (x = A to I).
-  * @param  GPIO_Pin : This parameter contains the pin number, it can be any value
-  *         of the @ref GPIO_Pin_TypeDef enumeration.
-  * @param  GPIO_Mode : This parameter can be a value of the
-  *         @ref GPIO_Mode_TypeDef enumeration.
+  * @param  Pin : This parameter contains the pin number, it can be any value
+  *         of the @ref GPIO_Pin enumeration.
+  * @param  Mode : This parameter can be a value of the
+  *         @ref GPIO_Mode enumeration.
   * @retval None
   */
 
-void GPIO_Init(GPIO_TypeDef* GPIOx, GPIO_Pin_TypeDef GPIO_Pin, GPIO_Mode_TypeDef GPIO_Mode)
+void GPIO_Init(GPIO_TypeDef* GPIOx, GPIO_Pin Pin, GPIO_Mode Mode)
 {
   /*----------------------*/
   /* Check the parameters */
   /*----------------------*/
   
-  assert_param(IS_GPIO_MODE_OK(GPIO_Mode));
-  assert_param(IS_GPIO_PIN_OK(GPIO_Pin));
+  assert_param(IS_GPIO_MODE(Mode));
+  assert_param(IS_GPIO_PIN(Pin));
   
   /* Reset corresponding bit to GPIO_Pin in CR2 register */
-  GPIOx->CR2 &= (uint8_t)(~(GPIO_Pin));
+  GPIOx->CR2 &= (uint8_t)(~(Pin));
   
   /*-----------------------------*/
   /* Input/Output mode selection */
   /*-----------------------------*/
   
-  if ((((uint8_t)(GPIO_Mode)) & (uint8_t)0x80) != (uint8_t)0x00) /* Output mode */
+
+  if(((uint8_t)Mode & (uint8_t)0x80) != (uint8_t)0x00)
   {
-    if ((((uint8_t)(GPIO_Mode)) & (uint8_t)0x10) != (uint8_t)0x00) /* High level */
+    if ((((uint8_t)(Mode)) & (uint8_t)0x10) != (uint8_t)0x00) /* High level */
     {
-      GPIOx->ODR |= (uint8_t)GPIO_Pin;
+      GPIOx->ODR |= (uint8_t)Pin;
     } 
     else /* Low level */
     {
-      GPIOx->ODR &= (uint8_t)(~(GPIO_Pin));
+      GPIOx->ODR &= (uint8_t)(~(Pin));
     }
     /* Set Output mode */
-    GPIOx->DDR |= (uint8_t)GPIO_Pin;
+    GPIOx->DDR |= (uint8_t)Pin;
   } 
   else /* Input mode */
   {
     /* Set Input mode */
-    GPIOx->DDR &= (uint8_t)(~(GPIO_Pin));
+    GPIOx->DDR &= (uint8_t)(~(Pin));
   }
   
   /*------------------------------------------------------------------------*/
   /* Pull-Up/Float (Input) or Push-Pull/Open-Drain (Output) modes selection */
   /*------------------------------------------------------------------------*/
   
-  if ((((uint8_t)(GPIO_Mode)) & (uint8_t)0x40) != (uint8_t)0x00) /* Pull-Up or Push-Pull */
+  if ((((uint8_t)(Mode)) & (uint8_t)0x40) != (uint8_t)0x00) /* Pull-Up or Push-Pull */
   {
-    GPIOx->CR1 |= (uint8_t)GPIO_Pin;
+    GPIOx->CR1 |= (uint8_t)Pin;
   } 
   else /* Float or Open-Drain */
   {
-    GPIOx->CR1 &= (uint8_t)(~(GPIO_Pin));
+    GPIOx->CR1 &= (uint8_t)(~(Pin));
   }
   
   /*-----------------------------------------------------*/
   /* Interrupt (Input) or Slope (Output) modes selection */
   /*-----------------------------------------------------*/
   
-  if ((((uint8_t)(GPIO_Mode)) & (uint8_t)0x20) != (uint8_t)0x00) /* Interrupt or Slow slope */
+  if ((((uint8_t)(Mode)) & (uint8_t)0x20) != (uint8_t)0x00) /* Interrupt or Slow slope */
   {
-    GPIOx->CR2 |= (uint8_t)GPIO_Pin;
+    GPIOx->CR2 |= (uint8_t)Pin;
   } 
   else /* No external interrupt or No slope control */
   {
-    GPIOx->CR2 &= (uint8_t)(~(GPIO_Pin));
+    GPIOx->CR2 &= (uint8_t)(~(Pin));
   }
 }
 
@@ -151,7 +152,7 @@ void GPIO_Write(GPIO_TypeDef* GPIOx, uint8_t PortVal)
   *         data register.
   * @retval None
   */
-void GPIO_WriteHigh(GPIO_TypeDef* GPIOx, GPIO_Pin_TypeDef PortPins)
+void GPIO_WriteHigh(GPIO_TypeDef* GPIOx, GPIO_Pin PortPins)
 {
   GPIOx->ODR |= (uint8_t)PortPins;
 }
@@ -164,7 +165,7 @@ void GPIO_WriteHigh(GPIO_TypeDef* GPIOx, GPIO_Pin_TypeDef PortPins)
   *         data register.
   * @retval None
   */
-void GPIO_WriteLow(GPIO_TypeDef* GPIOx, GPIO_Pin_TypeDef PortPins)
+void GPIO_WriteLow(GPIO_TypeDef* GPIOx, GPIO_Pin PortPins)
 {
   GPIOx->ODR &= (uint8_t)(~PortPins);
 }
@@ -177,7 +178,7 @@ void GPIO_WriteLow(GPIO_TypeDef* GPIOx, GPIO_Pin_TypeDef PortPins)
   *         data register.
   * @retval None
   */
-void GPIO_WriteReverse(GPIO_TypeDef* GPIOx, GPIO_Pin_TypeDef PortPins)
+void GPIO_WriteReverse(GPIO_TypeDef* GPIOx, GPIO_Pin PortPins)
 {
   GPIOx->ODR ^= (uint8_t)PortPins;
 }
@@ -210,7 +211,7 @@ uint8_t GPIO_ReadInputData(GPIO_TypeDef* GPIOx)
   * @param  GPIO_Pin : Specifies the pin number.
   * @retval BitStatus : GPIO input pin status.
   */
-BitStatus GPIO_ReadInputPin(GPIO_TypeDef* GPIOx, GPIO_Pin_TypeDef GPIO_Pin)
+BitStatus GPIO_ReadInputPin(GPIO_TypeDef* GPIOx, GPIO_Pin GPIO_Pin)
 {
   return ((BitStatus)(GPIOx->IDR & (uint8_t)GPIO_Pin));
 }
@@ -222,10 +223,10 @@ BitStatus GPIO_ReadInputPin(GPIO_TypeDef* GPIOx, GPIO_Pin_TypeDef GPIO_Pin)
   * @param  NewState : The new state of the pull up pin.
   * @retval None
   */
-void GPIO_ExternalPullUpConfig(GPIO_TypeDef* GPIOx, GPIO_Pin_TypeDef GPIO_Pin, FunctionalState NewState)
+void GPIO_ExternalPullUpConfig(GPIO_TypeDef* GPIOx, GPIO_Pin GPIO_Pin, FunctionalState NewState)
 {
   /* Check the parameters */
-  assert_param(IS_GPIO_PIN_OK(GPIO_Pin));
+  assert_param(IS_GPIO_PIN(GPIO_Pin));
   assert_param(IS_FUNCTIONALSTATE_OK(NewState));
   
   if (NewState != DISABLE) /* External Pull-Up Set*/

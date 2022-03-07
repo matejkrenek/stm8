@@ -4,8 +4,7 @@
             "name": "STM8",
             "includePath": [
                 "${workspaceFolder}/**",
-                /*"C:/Program Files/SDCC/include/**",*/
-                "/opt/sdcc/share/sdcc/include/**",
+                "C:/Program Files/SDCC/include/**",
                 "app/inc/**",
                 "drivers/inc/**"
             ],
@@ -14,8 +13,7 @@
                 "USE_STDPERIPH_DRIVER",
                 "_SDCC_"
             ],
-            /*"compilerPath": "C:/ProgramData/chocolatey/bin/gcc.exe",*/
-            "compilerPath": "/opt/sdcc/bin/sdcc",
+            "compilerPath": "C:/ProgramData/chocolatey/bin/gcc.exe",
             "cStandard": "c99",
             "cppStandard": "c++11",
             "intelliSenseMode": "gcc-x64"
