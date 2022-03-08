@@ -1,10 +1,6 @@
 #include "stm8s.h"
 #include "pwm.h"
 
-void DELAY(uint32_t iterations) {
-    for(uint32_t i = 0; i < iterations; i++);
-}
-
 void main(void)
 {
     // frequency
