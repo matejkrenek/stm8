@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "stm8s_helpers.h": "c",
+        "stm8s.h": "c"
+    }
+}

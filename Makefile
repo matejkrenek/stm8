@@ -50,6 +50,7 @@ C_SOURCES += drivers/src/stm8s_gpio.c
 # C_SOURCES += drivers/src/stm8s_uart1.c
 # C_SOURCES += drivers/src/stm8s_uart3.c
 # C_SOURCES += drivers/src/stm8s_wwdg.c
+C_SOURCES += drivers/src/stm8s_helpers.c
 
 ########################################
 # Tools

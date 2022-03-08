@@ -68,17 +68,17 @@ void GPIO_DeInit(GPIO_TypeDef* GPIOx)
   * @retval None
   */
 
-void GPIO_Init(GPIO_TypeDef* GPIOx, GPIO_Pin Pin, GPIO_Mode Mode)
+Pin* GPIO_Init(GPIO_TypeDef* GPIOx, GPIO_Pin GPIO_pin, GPIO_Mode Mode)
 {
   /*----------------------*/
   /* Check the parameters */
   /*----------------------*/
   
   assert_param(IS_GPIO_MODE(Mode));
-  assert_param(IS_GPIO_PIN(Pin));
+  assert_param(IS_GPIO_PIN(GPIO_pin));
   
   /* Reset corresponding bit to GPIO_Pin in CR2 register */
-  GPIOx->CR2 &= (uint8_t)(~(Pin));
+  GPIOx->CR2 &= (uint8_t)(~(GPIO_pin));
   
   /*-----------------------------*/
   /* Input/Output mode selection */
@@ -89,19 +89,19 @@ void GPIO_Init(GPIO_TypeDef* GPIOx, GPIO_Pin Pin, GPIO_Mode Mode)
   {
     if ((((uint8_t)(Mode)) & (uint8_t)0x10) != (uint8_t)0x00) /* High level */
     {
-      GPIOx->ODR |= (uint8_t)Pin;
+      GPIOx->ODR |= (uint8_t)GPIO_pin;
     } 
     else /* Low level */
     {
-      GPIOx->ODR &= (uint8_t)(~(Pin));
+      GPIOx->ODR &= (uint8_t)(~(GPIO_pin));
     }
     /* Set Output mode */
-    GPIOx->DDR |= (uint8_t)Pin;
+    GPIOx->DDR |= (uint8_t)GPIO_pin;
   } 
   else /* Input mode */
   {
     /* Set Input mode */
-    GPIOx->DDR &= (uint8_t)(~(Pin));
+    GPIOx->DDR &= (uint8_t)(~(GPIO_pin));
   }
   
   /*------------------------------------------------------------------------*/
@@ -110,11 +110,11 @@ void GPIO_Init(GPIO_TypeDef* GPIOx, GPIO_Pin Pin, GPIO_Mode Mode)
   
   if ((((uint8_t)(Mode)) & (uint8_t)0x40) != (uint8_t)0x00) /* Pull-Up or Push-Pull */
   {
-    GPIOx->CR1 |= (uint8_t)Pin;
+    GPIOx->CR1 |= (uint8_t)GPIO_pin;
   } 
   else /* Float or Open-Drain */
   {
-    GPIOx->CR1 &= (uint8_t)(~(Pin));
+    GPIOx->CR1 &= (uint8_t)(~(GPIO_pin));
   }
   
   /*-----------------------------------------------------*/
@@ -123,12 +123,16 @@ void GPIO_Init(GPIO_TypeDef* GPIOx, GPIO_Pin Pin, GPIO_Mode Mode)
   
   if ((((uint8_t)(Mode)) & (uint8_t)0x20) != (uint8_t)0x00) /* Interrupt or Slow slope */
   {
-    GPIOx->CR2 |= (uint8_t)Pin;
+    GPIOx->CR2 |= (uint8_t)GPIO_pin;
   } 
   else /* No external interrupt or No slope control */
   {
-    GPIOx->CR2 &= (uint8_t)(~(Pin));
+    GPIOx->CR2 &= (uint8_t)(~(GPIO_pin));
   }
+
+  Pin pin = {GPIOx, GPIO_pin, 0, 0};
+
+  return &pin;
 }
 
 /**
@@ -139,9 +143,9 @@ void GPIO_Init(GPIO_TypeDef* GPIOx, GPIO_Pin Pin, GPIO_Mode Mode)
   *         data register.
   * @retval None
   */
-void GPIO_Write(GPIO_TypeDef* GPIOx, uint8_t PortVal)
+void GPIO_Write(Pin* pin, uint8_t PortVal)
 {
-  GPIOx->ODR = PortVal;
+  pin->port->ODR = PortVal;
 }
 
 /**
@@ -152,9 +156,9 @@ void GPIO_Write(GPIO_TypeDef* GPIOx, uint8_t PortVal)
   *         data register.
   * @retval None
   */
-void GPIO_WriteHigh(GPIO_TypeDef* GPIOx, GPIO_Pin PortPins)
+void GPIO_WriteHigh(Pin* pin)
 {
-  GPIOx->ODR |= (uint8_t)PortPins;
+  pin->port->ODR |= (uint8_t)pin->pin;
 }
 
 /**
@@ -165,9 +169,9 @@ void GPIO_WriteHigh(GPIO_TypeDef* GPIOx, GPIO_Pin PortPins)
   *         data register.
   * @retval None
   */
-void GPIO_WriteLow(GPIO_TypeDef* GPIOx, GPIO_Pin PortPins)
+void GPIO_WriteLow(Pin* pin)
 {
-  GPIOx->ODR &= (uint8_t)(~PortPins);
+  pin->port->ODR &= (uint8_t)(~pin->pin);
 }
 
 /**
@@ -178,9 +182,9 @@ void GPIO_WriteLow(GPIO_TypeDef* GPIOx, GPIO_Pin PortPins)
   *         data register.
   * @retval None
   */
-void GPIO_WriteReverse(GPIO_TypeDef* GPIOx, GPIO_Pin PortPins)
+void GPIO_WriteReverse(Pin* pin)
 {
-  GPIOx->ODR ^= (uint8_t)PortPins;
+  pin->port->ODR ^= (uint8_t)pin->pin;
 }
 
 /**
@@ -189,9 +193,9 @@ void GPIO_WriteReverse(GPIO_TypeDef* GPIOx, GPIO_Pin PortPins)
   * @param  GPIOx : Select the GPIO peripheral number (x = A to I).
   * @retval GPIO output data port value.
   */
-uint8_t GPIO_ReadOutputData(GPIO_TypeDef* GPIOx)
+uint8_t GPIO_ReadOutputData(Pin* pin)
 {
-  return ((uint8_t)GPIOx->ODR);
+  return ((uint8_t)pin->port->ODR);
 }
 
 /**
@@ -200,9 +204,9 @@ uint8_t GPIO_ReadOutputData(GPIO_TypeDef* GPIOx)
   * @param  GPIOx : Select the GPIO peripheral number (x = A to I).
   * @retval GPIO input data port value.
   */
-uint8_t GPIO_ReadInputData(GPIO_TypeDef* GPIOx)
+uint8_t GPIO_ReadInputData(Pin* pin)
 {
-  return ((uint8_t)GPIOx->IDR);
+  return ((uint8_t)pin->port->IDR);
 }
 
 /**
@@ -211,9 +215,9 @@ uint8_t GPIO_ReadInputData(GPIO_TypeDef* GPIOx)
   * @param  GPIO_Pin : Specifies the pin number.
   * @retval BitStatus : GPIO input pin status.
   */
-BitStatus GPIO_ReadInputPin(GPIO_TypeDef* GPIOx, GPIO_Pin GPIO_Pin)
+bool GPIO_ReadInputPin(Pin* pin)
 {
-  return ((BitStatus)(GPIOx->IDR & (uint8_t)GPIO_Pin));
+  return (pin->port->IDR & (uint8_t)pin->pin) == 0x00;
 }
 
 /**
@@ -238,6 +242,17 @@ void GPIO_ExternalPullUpConfig(GPIO_TypeDef* GPIOx, GPIO_Pin GPIO_Pin, Functiona
   }
 }
 
+
+const GPIO_Module GPIO = {
+  .init = GPIO_Init,
+  .write = GPIO_Write,
+  .writeLow = GPIO_WriteLow,
+  .writeHigh = GPIO_WriteHigh,
+  .writeReverse = GPIO_WriteReverse,
+  .read = GPIO_ReadInputPin,
+  .readOutputData = GPIO_ReadOutputData,
+  .readInputData = GPIO_ReadInputData,
+};
 /**
   * @}
   */

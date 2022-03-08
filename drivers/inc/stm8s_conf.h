@@ -85,6 +85,7 @@
  #include "stm8s_uart4.h"
 #endif /* (STM8AF622x) */
 #include "stm8s_wwdg.h"
+#include "stm8s_helpers.h"
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/

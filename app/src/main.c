@@ -1,13 +1,26 @@
 #include "stm8s.h"
+#include "pwm.h"
+
+void DELAY(uint32_t iterations) {
+    for(uint32_t i = 0; i < iterations; i++);
+}
 
 void main(void)
 {
-    CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);
-    gpio.init(GPIOC, PIN_5, OUTPUT_PP_HIGH_FAST);
+    // frequency
+    CLK.HSI(HSIDIV1);
+
+    // initialize pins
+    Pin* LED = GPIO.init(GPIOC, PIN_5, OUTPUT_PP_HIGH_SLOW);
+    Pin* Button = GPIO.init(GPIOE, PIN_4, INPUT_FL_NO_IT);
+    
 
     while (1)
     {
-        for (uint32_t i = 0; i < 100000; i++)
-            ;
+        if(GPIO.read(Button)) {
+            GPIO.writeLow(LED);
+        }
+
+        delay.ms(1000);
     }
 }

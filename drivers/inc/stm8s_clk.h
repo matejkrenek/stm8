@@ -178,18 +178,18 @@ typedef enum {
    Other bits correspond to the divider's bits mapping
 */
 typedef enum {
-  CLK_PRESCALER_HSIDIV1   = (uint8_t)0x00, /*!< High speed internal clock prescaler: 1 */
-  CLK_PRESCALER_HSIDIV2   = (uint8_t)0x08, /*!< High speed internal clock prescaler: 2 */
-  CLK_PRESCALER_HSIDIV4   = (uint8_t)0x10, /*!< High speed internal clock prescaler: 4 */
-  CLK_PRESCALER_HSIDIV8   = (uint8_t)0x18, /*!< High speed internal clock prescaler: 8 */
-  CLK_PRESCALER_CPUDIV1   = (uint8_t)0x80, /*!< CPU clock division factors 1 */
-  CLK_PRESCALER_CPUDIV2   = (uint8_t)0x81, /*!< CPU clock division factors 2 */
-  CLK_PRESCALER_CPUDIV4   = (uint8_t)0x82, /*!< CPU clock division factors 4 */
-  CLK_PRESCALER_CPUDIV8   = (uint8_t)0x83, /*!< CPU clock division factors 8 */
-  CLK_PRESCALER_CPUDIV16  = (uint8_t)0x84, /*!< CPU clock division factors 16 */
-  CLK_PRESCALER_CPUDIV32  = (uint8_t)0x85, /*!< CPU clock division factors 32 */
-  CLK_PRESCALER_CPUDIV64  = (uint8_t)0x86, /*!< CPU clock division factors 64 */
-  CLK_PRESCALER_CPUDIV128 = (uint8_t)0x87  /*!< CPU clock division factors 128 */
+  HSIDIV1   = (uint8_t)0x00, /*!< High speed internal clock prescaler: 1 */
+  HSIDIV2   = (uint8_t)0x08, /*!< High speed internal clock prescaler: 2 */
+  HSIDIV4   = (uint8_t)0x10, /*!< High speed internal clock prescaler: 4 */
+  HSIDIV8   = (uint8_t)0x18, /*!< High speed internal clock prescaler: 8 */
+  CPUDIV1   = (uint8_t)0x80, /*!< CPU clock division factors 1 */
+  CPUDIV2   = (uint8_t)0x81, /*!< CPU clock division factors 2 */
+  CPUDIV4   = (uint8_t)0x82, /*!< CPU clock division factors 4 */
+  CPUDIV8   = (uint8_t)0x83, /*!< CPU clock division factors 8 */
+  CPUDIV16  = (uint8_t)0x84, /*!< CPU clock division factors 16 */
+  CPUDIV32  = (uint8_t)0x85, /*!< CPU clock division factors 32 */
+  CPUDIV64  = (uint8_t)0x86, /*!< CPU clock division factors 64 */
+  CPUDIV128 = (uint8_t)0x87  /*!< CPU clock division factors 128 */
 } CLK_Prescaler_TypeDef;
 
 /**
@@ -199,6 +199,10 @@ typedef enum {
   CLK_SWIMDIVIDER_2 = (uint8_t)0x00, /*!< SWIM clock is divided by 2 */
   CLK_SWIMDIVIDER_OTHER = (uint8_t)0x01 /*!< SWIM clock is not divided by 2 */
 }CLK_SWIMDivider_TypeDef;
+
+typedef struct {
+    void (*HSI)(CLK_Prescaler_TypeDef);
+} CLK_Module;
 
 /**
   * @}
@@ -316,26 +320,26 @@ typedef enum {
 /**
   * @brief  Macros used by the assert function in order to check the different HSI prescaler values.
   */
-#define IS_CLK_HSIPRESCALER_OK(PRESCALER) (((PRESCALER) == CLK_PRESCALER_HSIDIV1) ||\
-    ((PRESCALER) == CLK_PRESCALER_HSIDIV2) ||\
-    ((PRESCALER) == CLK_PRESCALER_HSIDIV4) ||\
-    ((PRESCALER) == CLK_PRESCALER_HSIDIV8))
+#define IS_CLK_HSIPRESCALER_OK(PRESCALER) (((PRESCALER) == HSIDIV1) ||\
+    ((PRESCALER) == HSIDIV2) ||\
+    ((PRESCALER) == HSIDIV4) ||\
+    ((PRESCALER) == HSIDIV8))
 
 /**
   * @brief  Macros used by the assert function in order to check the different clock  prescaler values.
   */
-#define IS_CLK_PRESCALER_OK(PRESCALER) (((PRESCALER) == CLK_PRESCALER_HSIDIV1) ||\
-                                        ((PRESCALER) == CLK_PRESCALER_HSIDIV2) ||\
-                                        ((PRESCALER) == CLK_PRESCALER_HSIDIV4) ||\
-                                        ((PRESCALER) == CLK_PRESCALER_HSIDIV8) ||\
-                                        ((PRESCALER) == CLK_PRESCALER_CPUDIV1) ||\
-                                        ((PRESCALER) == CLK_PRESCALER_CPUDIV2) ||\
-                                        ((PRESCALER) == CLK_PRESCALER_CPUDIV4) ||\
-                                        ((PRESCALER) == CLK_PRESCALER_CPUDIV8) ||\
-                                        ((PRESCALER) == CLK_PRESCALER_CPUDIV16) ||\
-                                        ((PRESCALER) == CLK_PRESCALER_CPUDIV32) ||\
-                                        ((PRESCALER) == CLK_PRESCALER_CPUDIV64) ||\
-                                        ((PRESCALER) == CLK_PRESCALER_CPUDIV128))
+#define IS_CLK_PRESCALER_OK(PRESCALER) (((PRESCALER) == HSIDIV1) ||\
+                                        ((PRESCALER) == HSIDIV2) ||\
+                                        ((PRESCALER) == HSIDIV4) ||\
+                                        ((PRESCALER) == HSIDIV8) ||\
+                                        ((PRESCALER) == CPUDIV1) ||\
+                                        ((PRESCALER) == CPUDIV2) ||\
+                                        ((PRESCALER) == CPUDIV4) ||\
+                                        ((PRESCALER) == CPUDIV8) ||\
+                                        ((PRESCALER) == CPUDIV16) ||\
+                                        ((PRESCALER) == CPUDIV32) ||\
+                                        ((PRESCALER) == CPUDIV64) ||\
+                                        ((PRESCALER) == CPUDIV128))
 
 /**
   * @brief  Macros used by the assert function in order to check the different SWIM dividers values.
@@ -372,6 +376,7 @@ CLK_Source_TypeDef CLK_GetSYSCLKSource(void);
 FlagStatus CLK_GetFlagStatus(CLK_Flag_TypeDef CLK_FLAG);
 ITStatus CLK_GetITStatus(CLK_IT_TypeDef CLK_IT);
 void CLK_ClearITPendingBit(CLK_IT_TypeDef CLK_IT);
+extern const CLK_Module CLK;
 
 /**
   * @}

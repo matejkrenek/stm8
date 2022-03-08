@@ -2653,7 +2653,7 @@ CFG_TypeDef;
  #define CAN ((CAN_TypeDef *) CAN_BaseAddress)
 #endif /* (STM8S208) || (STM8AF52Ax) */
 
-#define CLK ((CLK_TypeDef *) CLK_BaseAddress)
+#define P_CLK ((CLK_TypeDef *) CLK_BaseAddress)
 
 #define EXTI ((EXTI_TypeDef *) EXTI_BaseAddress)
 

@@ -87,12 +87,30 @@ typedef enum
   PIN_ALL  = ((uint8_t)0xFF)   /*!< All pins selected */
 } GPIO_Pin;
 
+
+
+/**
+  * @brief Definition on the GPIO Pin struct to easly work with pins
+  */
+typedef struct {
+  GPIO_TypeDef* port;
+  GPIO_Pin pin;
+  uint8_t value, counter;
+} Pin;
+
 /**
   * @brief  Definition of the GPIO struct to work with ports.
   */
 
 typedef struct {
-    void (*init)(GPIO_TypeDef*, GPIO_Pin, GPIO_Mode);
+    Pin* (*init)(GPIO_TypeDef*, GPIO_Pin, GPIO_Mode);
+    void (*write)(Pin*, uint8_t);
+    void (*writeLow)(Pin*);
+    void (*writeHigh)(Pin*);
+    void (*writeReverse)(Pin*);
+    bool (*read)(Pin*);
+    uint8_t (*readOutputData)(Pin*);
+    uint8_t (*readInputData)(Pin*);
 } GPIO_Module;
 
 
@@ -146,15 +164,16 @@ typedef struct {
   */
 
 void GPIO_DeInit(GPIO_TypeDef* GPIOx);
-void GPIO_Init(GPIO_TypeDef* GPIOx, GPIO_Pin Pin, GPIO_Mode Mode);
-void GPIO_Write(GPIO_TypeDef* GPIOx, uint8_t PortVal);
-void GPIO_WriteHigh(GPIO_TypeDef* GPIOx, GPIO_Pin PortPins);
-void GPIO_WriteLow(GPIO_TypeDef* GPIOx, GPIO_Pin PortPins);
-void GPIO_WriteReverse(GPIO_TypeDef* GPIOx, GPIO_Pin PortPins);
-uint8_t GPIO_ReadInputData(GPIO_TypeDef* GPIOx);
-uint8_t GPIO_ReadOutputData(GPIO_TypeDef* GPIOx);
-BitStatus GPIO_ReadInputPin(GPIO_TypeDef* GPIOx, GPIO_Pin GPIO_Pin);
+Pin* GPIO_Init(GPIO_TypeDef* GPIOx, GPIO_Pin GPIO_pin, GPIO_Mode Mode);
+void GPIO_Write(Pin* pin, uint8_t PortVal);
+void GPIO_WriteHigh(Pin* pin);
+void GPIO_WriteLow(Pin* pin);
+void GPIO_WriteReverse(Pin* pin);
+uint8_t GPIO_ReadInputData(Pin* pin);
+uint8_t GPIO_ReadOutputData(Pin* pin);
+bool GPIO_ReadInputPin(Pin* pin);
 void GPIO_ExternalPullUpConfig(GPIO_TypeDef* GPIOx, GPIO_Pin GPIO_Pin, FunctionalState NewState);
+extern const GPIO_Module GPIO;
 /**
   * @}
   */
