@@ -1,5 +1,4 @@
 #include "stm8s.h"
-#include "pwm.h"
 
 void main(void)
 {
