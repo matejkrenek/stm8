@@ -95,7 +95,9 @@ typedef enum
 typedef struct {
   GPIO_TypeDef* port;
   GPIO_Pin pin;
+  GPIO_Mode mode;
   uint8_t value, counter;
+  uint8_t now, prev, power;
 } Pin;
 
 /**

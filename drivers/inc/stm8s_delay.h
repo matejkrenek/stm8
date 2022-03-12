@@ -1,6 +1,6 @@
 /**
   ****************************************************************************************************
-  * @file    stm8s_helpers.h
+  * @file    stm8s_delay.h
   * @author  Matěj Křenek
   * @version V1.0.0
   * @date    8-March-2020
@@ -21,7 +21,9 @@
 /** @addtogroup HELPERS_Exported_Types
   * @{
   */
-
+typedef struct {
+  void (*cycles)(uint32_t);
+} Delay_Module;
 /**
   * @}
   */
@@ -53,7 +55,8 @@
   * @{
   */
 
-void delay(uint32_t iterations);
+void delay_cycles(uint32_t cycles);
+extern const Delay_Module delay;
 
 
 /**

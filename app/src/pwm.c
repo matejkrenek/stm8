@@ -28,20 +28,22 @@
   * @{
   */
 
-Pin* PWM_Create(GPIO_TypeDef* port, GPIO_Pin pin, uint8_t pwm_value) {
-    Pin pwm_pin = {port, pin, pwm_value, 0};
+Pin* PWM_Create(Pin* pin, uint8_t pwm_value) {
+    pin->value = pwm_value;
+    pin->counter = 0;
 
-    return &pwm_pin;
+    return pin;
 }
 
-void PWM_Modulate(Pin* pwm_pin) {
-    if(pwm_pin->value > pwm_pin->counter) {
+void PWM_Modulate(Pin* pwm_pin, uint8_t power) {
+    if((pwm_pin->value- pwm_pin->counter) > power) {
         GPIO.writeHigh(pwm_pin);
     } else {
         GPIO.writeLow(pwm_pin);
     }
 
-    for(uint32_t i = 0; i < 50; i++);
+    delay.cycles(50);
+    pwm_pin->counter += 1;
 }
 
 const PWM_Module PWM = {

@@ -24,8 +24,8 @@
 
 
 typedef struct {
-  Pin* (*create)(GPIO_TypeDef*, GPIO_Pin, uint8_t);
-  void (*modulate)(Pin*);
+  Pin* (*create)(Pin*, uint8_t);
+  void (*modulate)(Pin*, uint8_t);
 } PWM_Module;
 
 /**
@@ -59,8 +59,8 @@ typedef struct {
   * @{
   */
 
-Pin* PWM_Create(GPIO_TypeDef* port, GPIO_Pin pin, uint8_t pwm_value);
-void PWM_Modulate(Pin* pwm_pin);
+Pin* PWM_Create(Pin* pin, uint8_t pwm_value);
+void PWM_Modulate(Pin* pwm_pin, uint8_t power);
 extern const PWM_Module PWM;
 
 /**

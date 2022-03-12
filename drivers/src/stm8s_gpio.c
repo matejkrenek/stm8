@@ -130,9 +130,17 @@ Pin* GPIO_Init(GPIO_TypeDef* GPIOx, GPIO_Pin GPIO_pin, GPIO_Mode Mode)
     GPIOx->CR2 &= (uint8_t)(~(GPIO_pin));
   }
 
-  Pin pin = {GPIOx, GPIO_pin, 0, 0};
+  Pin* pin = (Pin *) malloc(sizeof(Pin));
+  pin->port = GPIOx;
+  pin->pin = GPIO_pin;
+  pin->mode = Mode;
+  pin->now = 0;
+  pin->prev = 0;
+  pin->power = 10;
+  pin->value = 0;
+  pin->counter = 0;
 
-  return &pin;
+  return pin;
 }
 
 /**
@@ -253,6 +261,7 @@ const GPIO_Module GPIO = {
   .readOutputData = GPIO_ReadOutputData,
   .readInputData = GPIO_ReadInputData,
 };
+
 /**
   * @}
   */

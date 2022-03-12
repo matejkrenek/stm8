@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    stm8s_helpers.c
+  * @file    stm8s_delay.c
   * @author  Matěj Křenek
   * @version V1.0.0
   * @date    8-March-2020
@@ -9,7 +9,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm8s_helpers.h"
+#include "stm8s_delay.h"
 
 /** @addtogroup STM8S_StdPeriph_Driver
   * @{
@@ -28,9 +28,13 @@
   * @{
   */
 
-void delay(uint32_t iterations) {
-    for (uint32_t i = 0; i < iterations; i++);
+void delay_cycles(uint32_t cycles) {
+  for (uint32_t i = 0; i < cycles; i++);  
 }
+
+const Delay_Module delay = {
+  .cycles = delay_cycles,
+};
 
 /**
   * @}
