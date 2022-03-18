@@ -1,7 +1,6 @@
 {
-    "files.associations": {
-        "stm8s.h": "c",
-        "pwm.h": "c",
-        "type_traits": "c"
+    "cSpell.enabled": false,
+    "files.exclude": {
+        "build/": true
     }
 }

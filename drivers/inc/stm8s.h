@@ -122,6 +122,7 @@
   */
 #define HSI_VALUE   ((uint32_t)16000000) /*!< Typical Value of the HSI in Hz */
 #define LSI_VALUE   ((uint32_t)128000)   /*!< Typical Value of the LSI in Hz */
+#define len(arr) sizeof(arr)/sizeof(arr[0])
 
 #ifdef _COSMIC_
  #define FAR  @far

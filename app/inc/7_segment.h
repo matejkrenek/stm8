@@ -1,6 +1,6 @@
 /**
   ****************************************************************************************************
-  * @file    pwm.h
+  * @file    7_segment.h
   * @author  Matěj Křenek
   * @version V1.0.0
   * @date    8-March-2020
@@ -10,7 +10,7 @@
 
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __PWM_H
+#ifndef __SEVEN_SEGMENT_H
 #define __PWM_H
 
 /* Includes ------------------------------------------------------------------*/
@@ -24,9 +24,9 @@
 
 
 typedef struct {
-  Pin* (*create)(Pin*, uint8_t);
-  void (*modulate)(Pin*, uint8_t);
-} PWM_Module;
+  Pin* (*init)(Pin*, uint8_t);
+  void (*write)(Pin*, uint8_t);
+} Seven_Segment_Module;
 
 /**
   * @}
@@ -59,9 +59,9 @@ typedef struct {
   * @{
   */
 
-Pin* PWM_Create(Pin* pin, uint8_t pwm_value);
-void PWM_Modulate(Pin* pwm_pin, uint8_t power);
-extern const PWM_Module PWM;
+Pin* Seven_Segment_Init(Pin*, uint8_t);
+void Seven_Segment_Write(Pin*, uint8_t);
+extern const Seven_Segment_Module SevenSegment;
 
 /**
   * @}
