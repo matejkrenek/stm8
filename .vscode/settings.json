@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "files.associations": {
         "stm8s.h": "c",
         "type_traits": "c",
@@ -6,3 +7,10 @@
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }
+=======
+    "cSpell.enabled": false,
+    "files.exclude": {
+        "build/": true
+    }
+}
+>>>>>>> b4872c2c852ba1330324b9df3d04f4af84540fea
