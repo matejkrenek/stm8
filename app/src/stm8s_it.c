@@ -150,17 +150,6 @@ INTERRUPT_HANDLER(EXTI_PORTD_IRQHandler, 6)
      */
 }
 
-/**
- * @brief  External Interrupt PORTE Interrupt routine
- * @param  None
- * @retval None
- */
-INTERRUPT_HANDLER(EXTI_PORTE_IRQHandler, 7)
-{
-    /* In order to detect unexpected events during development,
-     * it is recommended to set a breakpoint on the following instruction.
-     */
-}
 #ifdef STM8S903
 
 /**
@@ -265,7 +254,7 @@ INTERRUPT_HANDLER(TIM5_CAP_COM_IRQHandler, 14)
      */
 }
 
-#else /*STM8S208, STM8S207, STM8S105 or STM8S103 or STM8S001 or STM8AF62Ax or STM8AF52Ax or STM8AF626x */
+#else  /*STM8S208, STM8S207, STM8S105 or STM8S103 or STM8S001 or STM8AF62Ax or STM8AF52Ax or STM8AF626x */
 
 /**
  * @brief  Timer2 Update/Overflow/Break Interrupt routine
@@ -428,7 +417,7 @@ INTERRUPT_HANDLER(ADC2_IRQHandler, 22)
      */
     return;
 }
-#else /*STM8S105, STM8S103 or STM8S903 or STM8AF626x */
+#else  /*STM8S105, STM8S103 or STM8S903 or STM8AF626x */
 
 /**
  * @brief  ADC1 interrupt routine.
@@ -457,7 +446,7 @@ INTERRUPT_HANDLER(TIM6_UPD_OVF_TRG_IRQHandler, 23)
      * it is recommended to set a breakpoint on the following instruction.
      */
 }
-#else /*STM8S208, STM8S207, STM8S105 or STM8S103 or STM8S001 or STM8AF62Ax or STM8AF52Ax or STM8AF626x */
+#else  /*STM8S208, STM8S207, STM8S105 or STM8S103 or STM8S001 or STM8AF62Ax or STM8AF52Ax or STM8AF626x */
 
 /**
  * @brief  Timer4 Update/Overflow Interrupt routine
@@ -487,6 +476,5 @@ INTERRUPT_HANDLER(EEPROM_EEC_IRQHandler, 24)
 /**
  * @}
  */
-
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
