@@ -116,18 +116,11 @@
 #endif                                 /* HSE_Value */
 
 /**
-<<<<<<< HEAD
- * @brief  Definition of Device on-chip RC oscillator frequencies
- */
-#define HSI_VALUE ((uint32_t)16000000) /*!< Typical Value of the HSI in Hz */
-#define LSI_VALUE ((uint32_t)128000)   /*!< Typical Value of the LSI in Hz */
-=======
   * @brief  Definition of Device on-chip RC oscillator frequencies
   */
 #define HSI_VALUE   ((uint32_t)16000000) /*!< Typical Value of the HSI in Hz */
 #define LSI_VALUE   ((uint32_t)128000)   /*!< Typical Value of the LSI in Hz */
 #define len(arr) sizeof(arr)/sizeof(arr[0])
->>>>>>> b4872c2c852ba1330324b9df3d04f4af84540fea
 
 #ifdef _COSMIC_
 #define FAR @far
@@ -2803,19 +2796,19 @@ typedef struct CFG_struct
 /*============================== Interrupt vector Handling ========================*/
 
 #ifdef _COSMIC_
-#define INTERRUPT_HANDLER(a, b) @far @interrupt void a(void)
+#define onInterrupt(a, b) @far @interrupt void a(void)
 #define INTERRUPT_HANDLER_TRAP(a) void @far @interrupt a(void)
 #endif /* _COSMIC_ */
 
 #ifdef _RAISONANCE_
-#define INTERRUPT_HANDLER(a, b) void a(void) interrupt b
+#define onInterrupt(a, b) void a(void) interrupt b
 #define INTERRUPT_HANDLER_TRAP(a) void a(void) trap
 #endif /* _RAISONANCE_ */
 
 #ifdef _IAR_
 #define STRINGVECTOR(x) #x
 #define VECTOR_ID(x) STRINGVECTOR(vector = (x))
-#define INTERRUPT_HANDLER(a, b) \
+#define onInterrupt(a, b) \
   _Pragma(VECTOR_ID((b) + 2))   \
       __interrupt void(a)(void)
 #define INTERRUPT_HANDLER_TRAP(a) \
@@ -2825,7 +2818,7 @@ typedef struct CFG_struct
 
 /* SDCC patch: declare ISR handlers */
 #ifdef _SDCC_
-#define INTERRUPT_HANDLER(a, b) void a() __interrupt(b)
+#define onInterrupt(a, b) void a() __interrupt(b)
 
 /* traps require >=v3.4.3 -> else warn and skip */
 #if SDCC_VERSION >= 30403

@@ -101,6 +101,12 @@ uint8_t ITC_GetSoftIntStatus(void)
   return (uint8_t)(ITC_GetCPUCC() & CPU_CC_I1I0);
 }
 
+
+void ITC_Enable(void)
+{
+  enableInterrupts();
+}
+
 /**
  * @brief  Gets the software priority of the specified interrupt source.
  * @param  IrqNum : Specifies the peripheral interrupt source.
@@ -335,6 +341,7 @@ void ITC_SetSoftwarePriority(ITC_Irq_TypeDef IrqNum, ITC_PriorityLevel_TypeDef P
 
 const ITC_Module ITC = {
     .setPriority = ITC_SetSoftwarePriority,
+    .enable = ITC_Enable
 };
 
 /**
