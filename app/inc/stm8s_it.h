@@ -119,23 +119,23 @@ INTERRUPT void EEPROM_EEC_IRQHandler(void);       /* EEPROM ECC CORRECTION */
 // SDCC patch: __interrupt keyword required after function name --> requires new block
 #elif defined(_SDCC_)
 
-INTERRUPT_HANDLER_TRAP(TRAP_IRQHandler);     /* TRAP */
-onInterrupt(TLI_IRQHandler, 0);        /* TLI */
-onInterrupt(AWU_IRQHandler, 1);        /* AWU */
-onInterrupt(CLK_IRQHandler, 2);        /* CLOCK */
-onInterrupt(EXTI_PORTA_IRQHandler, 3); /* T_EXTI PORTA */
-onInterrupt(EXTI_PORTB_IRQHandler, 4); /* T_EXTI PORTB */
-onInterrupt(EXTI_PORTC_IRQHandler, 5); /* T_EXTI PORTC */
-onInterrupt(EXTI_PORTD_IRQHandler, 6); /* T_EXTI PORTD */
-onInterrupt(EXTI_PORTE_IRQHandler, 7); /* T_EXTI PORTE */
+INTERRUPT_HANDLER_TRAP(TRAP_IRQHandler); /* TRAP */
+onInterrupt(TLI_IRQHandler, 0);          /* TLI */
+onInterrupt(AWU_IRQHandler, 1);          /* AWU */
+onInterrupt(CLK_IRQHandler, 2);          /* CLOCK */
+onInterrupt(EXTI_PORTA_IRQHandler, 3);   /* T_EXTI PORTA */
+onInterrupt(EXTI_PORTB_IRQHandler, 4);   /* T_EXTI PORTB */
+onInterrupt(EXTI_PORTC_IRQHandler, 5);   /* T_EXTI PORTC */
+onInterrupt(EXTI_PORTD_IRQHandler, 6);   /* T_EXTI PORTD */
+onInterrupt(EXTI_PORTE_IRQHandler, 7);   /* T_EXTI PORTE */
 
 #if defined(STM8S903) || defined(STM8AF622x)
-onInterrupt(EXTI_PORTF_IRQHandler, 8); /* T_EXTI PORTF */
+onInterrupt(EXTI_PORTF_IRQHandler, 8);   /* T_EXTI PORTF */
 #endif /* (STM8S903) || (STM8AF622x) */
 
 #if defined(STM8S208) || defined(STM8AF52Ax)
-onInterrupt(CAN_RX_IRQHandler, 8);     /* CAN RX */
-onInterrupt(CAN_TX_IRQHandler, 9);     /* CAN TX/ER/SC */
+onInterrupt(CAN_RX_IRQHandler, 8);       /* CAN RX */
+onInterrupt(CAN_TX_IRQHandler, 9);       /* CAN TX/ER/SC */
 #endif /* (STM8S208) || (STM8AF52Ax) */
 
 onInterrupt(SPI_IRQHandler, 10);                  /* SPI */
