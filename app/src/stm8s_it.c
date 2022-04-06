@@ -150,6 +150,10 @@ onInterrupt(EXTI_PORTD_IRQHandler, 6)
      */
 }
 
+onInterrupt(EXTI_PORTE_IRQHandler, 7)
+{
+}
+
 #ifdef STM8S903
 
 /**
