@@ -112,7 +112,7 @@ INTERRUPT void ADC1_IRQHandler(void);             /* ADC1 */
 #if defined(STM8S903) || defined(STM8AF622x)      // SDCC patch: add STM8AF622x
 INTERRUPT void TIM6_UPD_OVF_TRG_IRQHandler(void); /* TIM6 UPD/OVF/TRG */
 #else                                             /*STM8S208, STM8S207, STM8S105 or STM8S103 or STM8AF62Ax or STM8AF52Ax or STM8AF626x */
-INTERRUPT void TIM4_UPD_OVF_IRQHandler(void);     /* TIM4 UPD/OVF */
+INTERRUPT void TIM4_UPD_OVF_IRQHandler(void);     /* T_TIM4 UPD/OVF */
 #endif                                            /* (STM8S903) || (STM8AF622x) */
 INTERRUPT void EEPROM_EEC_IRQHandler(void);       /* EEPROM ECC CORRECTION */
 
@@ -188,7 +188,7 @@ onInterrupt(ADC1_IRQHandler, 22);             /* ADC1 */
 #if defined(STM8S903) || defined(STM8AF622x)
 onInterrupt(TIM6_UPD_OVF_TRG_IRQHandler, 23); /* TIM6 UPD/OVF/TRG */
 #else  /* (STM8S208) || (STM8S207) || (STM8S105) || (STM8S103) || (STM8AF62Ax) || (STM8AF52Ax) || (STM8AF626x) */
-onInterrupt(TIM4_UPD_OVF_IRQHandler, 23);     /* TIM4 UPD/OVF */
+onInterrupt(TIM4_UPD_OVF_IRQHandler, 23);     /* T_TIM4 UPD/OVF */
 #endif /* (STM8S903) || (STM8AF622x) */
 onInterrupt(EEPROM_EEC_IRQHandler, 24);       /* EEPROM ECC CORRECTION */
 

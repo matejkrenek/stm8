@@ -116,11 +116,11 @@
 #endif                                 /* HSE_Value */
 
 /**
-  * @brief  Definition of Device on-chip RC oscillator frequencies
-  */
-#define HSI_VALUE   ((uint32_t)16000000) /*!< Typical Value of the HSI in Hz */
-#define LSI_VALUE   ((uint32_t)128000)   /*!< Typical Value of the LSI in Hz */
-#define len(arr) sizeof(arr)/sizeof(arr[0])
+ * @brief  Definition of Device on-chip RC oscillator frequencies
+ */
+#define HSI_VALUE ((uint32_t)16000000) /*!< Typical Value of the HSI in Hz */
+#define LSI_VALUE ((uint32_t)128000)   /*!< Typical Value of the LSI in Hz */
+#define len(arr) sizeof(arr) / sizeof(arr[0])
 
 #ifdef _COSMIC_
 #define FAR @far
@@ -1092,7 +1092,7 @@ typedef struct TIM3_struct
 
 /*----------------------------------------------------------------------------*/
 /**
- * @brief  8-bit system timer (TIM4)
+ * @brief  8-bit system timer (T_TIM4)
  */
 
 typedef struct TIM4_struct
@@ -2707,7 +2707,7 @@ typedef struct CFG_struct
 #if defined(STM8S208) || defined(STM8S207) || defined(STM8S007) || defined(STM8S103) ||                        \
     defined(STM8S003) || defined(STM8S001) || defined(STM8S105) || defined(STM8S005) || defined(STM8AF52Ax) || \
     defined(STM8AF62Ax) || defined(STM8AF626x)
-#define TIM4 ((TIM4_TypeDef *)TIM4_BaseAddress)
+#define T_TIM4 ((TIM4_TypeDef *)TIM4_BaseAddress)
 #endif /* (STM8S208) || (STM8S207) || (STM8S007) || (STM8S103) || (STM8S003) || (STM8S001) || (STM8S105) || (STM8S005) || (STM8AF52Ax) || (STM8AF62Ax) || (STM8AF626x) */
 
 #if defined(STM8S903) || defined(STM8AF622x)
@@ -2808,8 +2808,8 @@ typedef struct CFG_struct
 #ifdef _IAR_
 #define STRINGVECTOR(x) #x
 #define VECTOR_ID(x) STRINGVECTOR(vector = (x))
-#define onInterrupt(a, b) \
-  _Pragma(VECTOR_ID((b) + 2))   \
+#define onInterrupt(a, b)     \
+  _Pragma(VECTOR_ID((b) + 2)) \
       __interrupt void(a)(void)
 #define INTERRUPT_HANDLER_TRAP(a) \
   _Pragma(VECTOR_ID(1))           \
