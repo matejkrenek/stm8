@@ -120,7 +120,7 @@ typedef enum
 
 typedef struct
 {
-  void (*init)(TIM4_Prescaler_TypeDef *, uint8_t);
+  void (*init)(TIM4_Prescaler_TypeDef, uint8_t);
   void (*enable)();
   void (*disable)();
 } TIM4_Module;
