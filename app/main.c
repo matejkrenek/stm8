@@ -9,10 +9,8 @@ void main(void)
     LED = GPIO.init(GPIOC, PIN_5, OUTPUT_PP_LOW_SLOW);
 
     TIM4.init(TIM2_PRESCALER_256, 61499);
-    // spuštění časovače
     TIM4.enable();
     TIM4.disable();
-    // spuštění čítače
 
     while (1)
     {
