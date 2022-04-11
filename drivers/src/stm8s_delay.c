@@ -30,22 +30,20 @@
 
 void delay_cycles(uint32_t value)
 {
-  uint32_t loops = (dly_const * value);
-
-  while (loops)
+  for (uint32_t i = 0; i < value; i++)
   {
-    _asm("nop");
-    loops--;
-  };
+    nop();
+  }
 }
 
 void delay_ms(uint32_t ms)
 {
-  while (ms)
+  uint32_t clock_freq = CLK_GetClockFreq();
+
+  for (uint32_t i = 0; i < ((clock_freq / 18 / 1000UL) * ms); i++)
   {
-    delay.cycles(1000);
-    ms--;
-  };
+    nop();
+  }
 }
 
 const Delay_Module delay = {

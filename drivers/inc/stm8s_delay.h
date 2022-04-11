@@ -17,9 +17,6 @@
 
 /* Exported types ------------------------------------------------------------*/
 
-#define F_CPU 16000000UL
-#define dly_const (F_CPU / 16000000.0F)
-
 /** @addtogroup HELPERS_Exported_Types
  * @{
  */

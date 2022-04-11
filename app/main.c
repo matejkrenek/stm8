@@ -1,14 +1,17 @@
+#include "setup.h"
 #include "stm8s.h"
+#include "LiquidCrystal_I2C.h"
 
-Pin *LED;
-
-void main(void)
+void setup(void)
 {
+    GPIO_DeInit;
+    CLK_DeInit();
+    I2C_DeInit();
     CLK.HSI(HSIDIV1);
+    CLK.SYS(CPUDIV1);
+    LiquidCrystal_I2C.init(0x26, 16, 2);
+}
 
-    LED = GPIO.init(GPIOC, PIN_5, OUTPUT_PP_LOW_SLOW);
-
-    while (1)
-    {
-    }
+void loop(void)
+{
 }
