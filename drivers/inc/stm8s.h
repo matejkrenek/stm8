@@ -623,7 +623,7 @@ typedef struct CLK_struct
 #define CLK_PCKENR1_UART2 ((uint8_t)0x08) /*!< UART2 clock enable */
 #define CLK_PCKENR1_UART1 ((uint8_t)0x04) /*!< UART1 clock enable */
 #define CLK_PCKENR1_SPI ((uint8_t)0x02)   /*!< SPI clock enable */
-#define CLK_PCKENR1_I2C ((uint8_t)0x01)   /*!< I2C clock enable */
+#define CLK_PCKENR1_I2C ((uint8_t)0x01)   /*!< T_I2C clock enable */
 
 #define CLK_PCKENR2_CAN ((uint8_t)0x80) /*!< CAN clock enable */
 #define CLK_PCKENR2_ADC ((uint8_t)0x08) /*!< ADC clock enable */
@@ -1360,25 +1360,25 @@ typedef struct TIM6_struct
  */
 /*----------------------------------------------------------------------------*/
 /**
- * @brief  Inter-Integrated Circuit (I2C)
+ * @brief  Inter-Integrated Circuit (T_I2C)
  */
 
 typedef struct I2C_struct
 {
-  __IO uint8_t CR1;    /*!< I2C control register 1 */
-  __IO uint8_t CR2;    /*!< I2C control register 2 */
-  __IO uint8_t FREQR;  /*!< I2C frequency register */
-  __IO uint8_t OARL;   /*!< I2C own address register LSB */
-  __IO uint8_t OARH;   /*!< I2C own address register MSB */
+  __IO uint8_t CR1;    /*!< T_I2C control register 1 */
+  __IO uint8_t CR2;    /*!< T_I2C control register 2 */
+  __IO uint8_t FREQR;  /*!< T_I2C frequency register */
+  __IO uint8_t OARL;   /*!< T_I2C own address register LSB */
+  __IO uint8_t OARH;   /*!< T_I2C own address register MSB */
   uint8_t RESERVED1;   /*!< Reserved byte */
-  __IO uint8_t DR;     /*!< I2C data register */
-  __IO uint8_t SR1;    /*!< I2C status register 1 */
-  __IO uint8_t SR2;    /*!< I2C status register 2 */
-  __IO uint8_t SR3;    /*!< I2C status register 3 */
-  __IO uint8_t ITR;    /*!< I2C interrupt register */
-  __IO uint8_t CCRL;   /*!< I2C clock control register low */
-  __IO uint8_t CCRH;   /*!< I2C clock control register high */
-  __IO uint8_t TRISER; /*!< I2C maximum rise time register */
+  __IO uint8_t DR;     /*!< T_I2C data register */
+  __IO uint8_t SR1;    /*!< T_I2C status register 1 */
+  __IO uint8_t SR2;    /*!< T_I2C status register 2 */
+  __IO uint8_t SR3;    /*!< T_I2C status register 3 */
+  __IO uint8_t ITR;    /*!< T_I2C interrupt register */
+  __IO uint8_t CCRL;   /*!< T_I2C clock control register low */
+  __IO uint8_t CCRH;   /*!< T_I2C clock control register high */
+  __IO uint8_t TRISER; /*!< T_I2C maximum rise time register */
   uint8_t RESERVED2;   /*!< Reserved byte */
 } I2C_TypeDef;
 
@@ -2671,7 +2671,7 @@ typedef struct CFG_struct
 #define IWDG ((IWDG_TypeDef *)IWDG_BaseAddress)
 
 #define SPI ((SPI_TypeDef *)SPI_BaseAddress)
-#define I2C ((I2C_TypeDef *)I2C_BaseAddress)
+#define T_I2C ((I2C_TypeDef *)I2C_BaseAddress)
 
 #if defined(STM8S208) || defined(STM8S207) || defined(STM8S007) || defined(STM8S103) || \
     defined(STM8S003) || defined(STM8S001) || defined(STM8S903) || defined(STM8AF52Ax) || defined(STM8AF62Ax)

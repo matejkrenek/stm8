@@ -122,7 +122,7 @@ typedef enum
 */
 typedef enum
 {
-  CLK_PERIPHERAL_I2C = (uint8_t)0x00, /*!< Peripheral Clock Enable 1, I2C */
+  CLK_PERIPHERAL_I2C = (uint8_t)0x00, /*!< Peripheral Clock Enable 1, T_I2C */
   CLK_PERIPHERAL_SPI = (uint8_t)0x01, /*!< Peripheral Clock Enable 1, SPI */
 #if defined(STM8S208) || defined(STM8S207) || defined(STM8S007) || defined(STM8AF52Ax) || defined(STM8AF62Ax)
   CLK_PERIPHERAL_UART1 = (uint8_t)0x02, /*!< Peripheral Clock Enable 1, UART1 */
@@ -214,6 +214,8 @@ typedef struct
 {
   void (*HSI)(CLK_Prescaler_TypeDef);
   void (*SYS)(CLK_Prescaler_TypeDef);
+  uint32_t (*GetFrequency)(void);
+  CLK_Source_TypeDef (*GetSYSSource)(void);
 } CLK_Module;
 
 /**

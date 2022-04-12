@@ -342,7 +342,7 @@ onInterrupt(UART1_RX_IRQHandler, 18)
 #endif /*STM8S105 || STM8S001 */
 
 /**
- * @brief  I2C Interrupt routine
+ * @brief  T_I2C Interrupt routine
  * @param  None
  * @retval None
  */

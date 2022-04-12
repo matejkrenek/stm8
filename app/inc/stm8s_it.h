@@ -91,7 +91,7 @@ INTERRUPT void UART4_TX_IRQHandler(void); /* UART4 TX */
 INTERRUPT void UART4_RX_IRQHandler(void); /* UART4 RX */
 #endif                                    /* (STM8AF622x) */
 
-INTERRUPT void I2C_IRQHandler(void); /* I2C */
+INTERRUPT void I2C_IRQHandler(void); /* T_I2C */
 
 #if defined(STM8S105) || defined(STM8S005) || defined(STM8AF626x)
 INTERRUPT void UART2_RX_IRQHandler(void); /* UART2 RX */
@@ -167,7 +167,7 @@ onInterrupt(UART4_TX_IRQHandler, 17);             /* UART4 TX */
 onInterrupt(UART4_RX_IRQHandler, 18);             /* UART4 RX */
 #endif /* (STM8AF622x) */
 
-onInterrupt(I2C_IRQHandler, 19);              /* I2C */
+onInterrupt(I2C_IRQHandler, 19);              /* T_I2C */
 
 #if defined(STM8S105) || defined(STM8S005) || defined(STM8AF626x)
 onInterrupt(UART2_TX_IRQHandler, 20);         /* UART2 TX */

@@ -45,8 +45,8 @@ void LiquidCrystal_I2C_Init(uint8_t address, uint8_t cols, uint8_t rows)
     _lcd_rows = rows;
     _lcd_backlight = LCD_BACKLIGHT;
     _lcd_displayfunction = LCD_4BITMODE | LCD_2LINE | LCD_5x8DOTS;
-    uint8_t clock_freq = CLK_GetClockFreq() / 1000000;
-    I2C_Init(100000, _lcd_address, I2C_DUTYCYCLE_2, I2C_ACK_CURR, I2C_ADDMODE_7BIT, clock_freq);
+    I2C.init(100000, _lcd_address, I2C_DUTYCYCLE_2, I2C_ACK_CURR, I2C_ADDMODE_7BIT, CLK.GetFrequency() / 1000000);
+    I2C.enable();
 
     LiquidCrystal_I2C.write(_lcd_address, _lcd_backlight);
 }
@@ -60,8 +60,11 @@ void LiquidCrystal_I2C_Write(uint8_t slave_address, uint8_t data)
 
     I2C_Send7bitAddress(slave_address, I2C_DIRECTION_TX);
 
+    GPIO.writeHigh(LED_BUILTIN);
+
     while (!I2C_CheckEvent(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))
         ;
+
     I2C_SendData(data);
 
     while (!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED))

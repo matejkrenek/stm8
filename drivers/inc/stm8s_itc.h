@@ -88,7 +88,7 @@ typedef enum
   ITC_IRQ_UART4_RX = (uint8_t)18, /*!< UART4 RX interrupt */
 #endif                            /*STM8AF622x */
 
-  ITC_IRQ_I2C = (uint8_t)19, /*!< I2C interrupt */
+  ITC_IRQ_I2C = (uint8_t)19, /*!< T_I2C interrupt */
 
 #if defined(STM8S105) || defined(STM8S005) || defined(STM8AF626x)
   ITC_IRQ_UART2_TX = (uint8_t)20, /*!< USART2 TX interrupt */
