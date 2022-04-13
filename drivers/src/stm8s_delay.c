@@ -46,9 +46,20 @@ void delay_ms(uint32_t ms)
   }
 }
 
+void delay_us(uint32_t us)
+{
+  uint32_t clock_freq = CLK_GetClockFreq();
+
+  for (uint32_t i = 0; i < ((clock_freq / 18 / 1000UL) * (us / 1000)); i++)
+  {
+    nop();
+  }
+}
+
 const Delay_Module delay = {
     .cycles = delay_cycles,
     .ms = delay_ms,
+    .us = delay_us,
 };
 
 /**

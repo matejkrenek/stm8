@@ -250,6 +250,10 @@ void GPIO_ExternalPullUpConfig(GPIO_TypeDef *GPIOx, GPIO_Pin GPIO_Pin, Functiona
   }
 }
 
+/**
+ * @brief  Configures struct for better work with GPIO.
+ * @retval None
+ */
 const GPIO_Module GPIO = {
     .init = GPIO_Init,
     .write = GPIO_Write,

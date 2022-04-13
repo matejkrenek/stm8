@@ -51,6 +51,17 @@ typedef struct
     void (*init)(uint8_t, uint8_t, uint8_t);
     void (*expanderWrite)(uint8_t);
     void (*write)(uint8_t, uint8_t);
+    void (*write4bits)(uint8_t);
+    void (*pulseEnable)(uint8_t);
+    void (*command)(uint8_t);
+    void (*send)(uint8_t, uint8_t);
+    void (*display)();
+    void (*clear)();
+    void (*home)();
+    void (*noBacklight)();
+    void (*backlight)();
+    void (*setCursor)(uint8_t, uint8_t);
+    void (*print)(uint8_t *);
 
 } LiquidCrystal_I2C_Module;
 
@@ -63,6 +74,17 @@ extern uint8_t _lcd_displayfunction;
 void LiquidCrystal_I2C_Init(uint8_t address, uint8_t cols, uint8_t rows);
 void LiquidCrystal_I2C_ExpanderWrite(uint8_t data);
 void LiquidCrystal_I2C_Write(uint8_t slave_address, uint8_t data);
-extern const LiquidCrystal_I2C_Module LiquidCrystal_I2C;
+void LiquidCrystal_I2C_Write4Bits(uint8_t data);
+void LiquidCrystal_I2C_PulseEnable(uint8_t data);
+void LiquidCrystal_I2C_Command(uint8_t data);
+void LiquidCrystal_I2C_Send(uint8_t data, uint8_t mode);
+void LiquidCrystal_I2C_Display();
+void LiquidCrystal_I2C_Clear();
+void LiquidCrystal_I2C_Home();
+void LiquidCrystal_I2C_NoBacklight();
+void LiquidCrystal_I2C_Backlight();
+void LiquidCrystal_I2C_SetCursor(uint8_t col, uint8_t row);
+void LiquidCrystal_I2C_Print(uint8_t *string);
+extern const LiquidCrystal_I2C_Module LCD;
 
 #endif

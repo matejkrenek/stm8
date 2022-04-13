@@ -24,6 +24,7 @@ typedef struct
 {
   void (*cycles)(uint32_t);
   void (*ms)(uint32_t);
+  void (*us)(uint32_t);
 } Delay_Module;
 /**
  * @}
@@ -58,6 +59,7 @@ typedef struct
 
 void delay_cycles(uint32_t value);
 void delay_ms(uint32_t ms);
+void delay_us(uint32_t us);
 extern const Delay_Module delay;
 
 /**
