@@ -212,6 +212,7 @@ typedef enum
 
 typedef struct
 {
+  void (*deinit)();
   void (*HSI)(CLK_Prescaler_TypeDef);
   void (*SYS)(CLK_Prescaler_TypeDef);
   uint32_t (*GetFrequency)(void);

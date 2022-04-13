@@ -744,6 +744,7 @@ void CLK_ClearITPendingBit(CLK_IT_TypeDef CLK_IT)
 }
 
 const CLK_Module CLK = {
+    .deinit = CLK_DeInit,
     .HSI = CLK_HSIPrescalerConfig,
     .SYS = CLK_SYSCLKConfig,
     .GetFrequency = CLK_GetClockFreq,

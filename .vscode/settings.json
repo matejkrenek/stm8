@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "type_traits": "c"
+        "type_traits": "c",
+        "liquidcrystal_i2c.h": "c",
+        "rc522.h": "c"
     }
 }

@@ -70,6 +70,8 @@ extern uint8_t _lcd_cols;
 extern uint8_t _lcd_rows;
 extern uint8_t _lcd_backlight;
 extern uint8_t _lcd_displayfunction;
+extern Pin *SDA;
+extern Pin *SCL;
 
 void LiquidCrystal_I2C_Init(uint8_t address, uint8_t cols, uint8_t rows);
 void LiquidCrystal_I2C_ExpanderWrite(uint8_t data);
@@ -85,6 +87,6 @@ void LiquidCrystal_I2C_NoBacklight();
 void LiquidCrystal_I2C_Backlight();
 void LiquidCrystal_I2C_SetCursor(uint8_t col, uint8_t row);
 void LiquidCrystal_I2C_Print(uint8_t *string);
-extern const LiquidCrystal_I2C_Module LCD;
+extern LiquidCrystal_I2C_Module LCD;
 
 #endif

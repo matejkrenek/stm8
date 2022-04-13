@@ -58,6 +58,11 @@ void GPIO_DeInit(GPIO_TypeDef *GPIOx)
   GPIOx->CR2 = GPIO_CR2_RESET_VALUE; /* Reset Control Register 2 */
 }
 
+void GPIO_DeInitAll()
+{
+  GPIO_DeInit;
+}
+
 /**
  * @brief  Initializes the GPIOx according to the specified parameters.
  * @param  GPIOx : Select the GPIO peripheral number (x = A to I).
@@ -256,6 +261,7 @@ void GPIO_ExternalPullUpConfig(GPIO_TypeDef *GPIOx, GPIO_Pin GPIO_Pin, Functiona
  */
 const GPIO_Module GPIO = {
     .init = GPIO_Init,
+    .deinit = GPIO_DeInitAll,
     .write = GPIO_Write,
     .writeLow = GPIO_WriteLow,
     .writeHigh = GPIO_WriteHigh,

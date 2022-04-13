@@ -26,11 +26,7 @@ Pin *SCL;
 //    I/D = 1; Increment by 1
 //    S = 0; No shift
 //
-// Note, however, that resetting the Arduino doesn't reset the LCD, so we
-// can't assume that its in that state when a sketch starts (and the
-// LiquidCrystal constructor is called).
-
-const LiquidCrystal_I2C_Module LCD = {
+LiquidCrystal_I2C_Module LCD = {
     .init = LiquidCrystal_I2C_Init,
     .expanderWrite = LiquidCrystal_I2C_ExpanderWrite,
     .write = LiquidCrystal_I2C_Write,
@@ -57,6 +53,8 @@ void LiquidCrystal_I2C_Init(uint8_t address, uint8_t cols, uint8_t rows)
 
     SDA = GPIO.init(GPIOE, PIN_2, OUTPUT_PP_HIGH_FAST);
     SCL = GPIO.init(GPIOE, PIN_1, OUTPUT_PP_HIGH_FAST);
+
+    I2C.deinit();
     I2C.init(100000, _lcd_address, I2C_DUTYCYCLE_2, I2C_ACK_CURR, I2C_ADDMODE_7BIT, 16);
     I2C.enable();
 
