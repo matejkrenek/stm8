@@ -13,6 +13,10 @@ const RC522_Module RFID = {
     .writeRegister = RC522_WriteRegister,
     .readRegister = RC522_ReadRegister,
     .antennaOn = RC522_AntennaOn,
+    .request = RC522_Request,
+    .communicateWithPICC = RC522_CommunicateWithPICC,
+    .clearBitMast = RC522_ClearBitMask,
+    .setBitMask = RC522_SetBitMask,
 };
 
 void RC522_PCD_Init(void)
@@ -120,7 +124,7 @@ void RC522_AntennaOn(void)
 
 #define MAXRLEN 18
 
-char PcdRequest(unsigned char req_code, unsigned char *pTagType)
+char RC522_Request(uint8_t *buffer, uint8_t *bufferSize)
 {
     char status;
     unsigned int unLen;
@@ -144,6 +148,95 @@ char PcdRequest(unsigned char req_code, unsigned char *pTagType)
         status = MI_ERR;
     }
 
+    return status;
+}
+
+void RC522_SetBitMask(uint8_t address, uint8_t mask)
+{
+    uint8_t tmp;
+    tmp = RFID.readRegister(address);
+    RFID.writeRegister(address, tmp | mask);
+}
+
+void RC522_ClearBitMask(uint8_t address, uint8_t mask)
+{
+    uint8_t tmp;
+    tmp = RFID.readRegister(address);
+    RFID.writeRegister(address, tmp & (~mask));
+}
+
+bool RC522_CommunicateWithPICC(uint8_t command, uint8_t *sendData, uint8_t sendLen, uint8_t *backData, uint8_t *backLen)
+{
+    bool status = MI_ERR;
+    uint8_t waitFor = (command == PCD_MFAuth ? 0x10 : 0x30);
+    uint8_t lastBits;
+    uint8_t n;
+    uint8_t i;
+
+    RFID.writeRegister(CommandReg, PCD_Idle);
+    RFID.writeRegister(ComIrqReg, 0x7F);
+    RFID.writeRegister(FIFOLevelReg, 0x80);
+    for (i = 0; i < sendLen; i++)
+    {
+        RFID.writeRegister(FIFODataReg, sendData[i]);
+    }
+    RFID.writeRegister(CommandReg, command);
+
+    if (command == PCD_Transceive)
+    {
+        RFID.setBitMask(BitFramingReg, 0x80);
+    }
+
+    i = 600;
+    do
+    {
+        n = RFID.readRegister(ComIrqReg);
+        i--;
+    } while ((i != 0) && !(n & 0x01) && !(n & waitFor));
+
+    if (i != 0)
+    {
+        if (!(RFID.readRegister(ErrorReg) & 0x1B))
+        {
+            status = MI_OK;
+            if (n & 0x01)
+            {
+                status = MI_NOTAGERR;
+            }
+            if (command == PCD_Transceive)
+            {
+                n = RFID.readRegister(FIFOLevelReg);
+                lastBits = RFID.readRegister(ControlReg) & 0x07;
+                if (lastBits)
+                {
+                    *backLen = (n - 1) * 8 + lastBits;
+                }
+                else
+                {
+                    *backLen = n * 8;
+                }
+                if (n == 0)
+                {
+                    n = 1;
+                }
+                if (n > MAXRLEN)
+                {
+                    n = MAXRLEN;
+                }
+                for (i = 0; i < n; i++)
+                {
+                    backData[i] = RFID.readRegister(FIFODataReg);
+                }
+            }
+        }
+        else
+        {
+            status = MI_ERR;
+        }
+    }
+
+    RFID.setBitMask(ControlReg, 0x80);
+    RFID.writeRegister(CommandReg, PCD_Idle);
     return status;
 }
 
@@ -493,130 +586,4 @@ void CalulateCRC(unsigned char *pIndata, unsigned char len, unsigned char *pOutD
     } while ((i != 0) && !(n & 0x04));
     pOutData[0] = ReadRawRC(CRCResultRegL);
     pOutData[1] = ReadRawRC(CRCResultRegM);
-}
-
-/////////////////////////////////////////////////////////////////////
-char test;
-void SetBitMask(unsigned char reg, unsigned char mask)
-{
-    char tmp = 0x0;
-    tmp = ReadRawRC(reg);
-    test = tmp;
-    WriteRawRC(reg, tmp | mask); // set bit mask
-}
-
-/////////////////////////////////////////////////////////////////////
-//?    ?:?RC522????
-//????:reg[IN]:?????
-//          mask[IN]:???
-/////////////////////////////////////////////////////////////////////
-void ClearBitMask(unsigned char reg, unsigned char mask)
-{
-    char tmp = 0x0;
-    tmp = ReadRawRC(reg);
-    WriteRawRC(reg, tmp & ~mask); // clear bit mask
-}
-
-/////////////////////////////////////////////////////////////////////
-//?    ?:??RC522?ISO14443???
-//????:Command[IN]:RC522???
-//          pInData[IN]:??RC522????????
-//          InLenByte[IN]:?????????
-//          pOutData[OUT]:??????????
-//          *pOutLenBit[OUT]:????????
-/////////////////////////////////////////////////////////////////////
-char PcdComMF522(unsigned char Command,
-                 unsigned char *pInData,
-                 unsigned char InLenByte,
-                 unsigned char *pOutData,
-                 unsigned int *pOutLenBit)
-{
-    char status = MI_ERR;
-    unsigned char irqEn = 0x00;
-    unsigned char waitFor = 0x00;
-    unsigned char lastBits;
-    unsigned char n;
-    unsigned int i;
-    switch (Command)
-    {
-    case PCD_AUTHENT:
-        irqEn = 0x12;
-        waitFor = 0x10;
-        break;
-    case PCD_TRANSCEIVE:
-        irqEn = 0x77;
-        waitFor = 0x30;
-        break;
-    default:
-        break;
-    }
-
-    WriteRawRC(ComIEnReg, irqEn | 0x80);
-    ClearBitMask(ComIrqReg, 0x80);
-    WriteRawRC(CommandReg, PCD_IDLE);
-    SetBitMask(FIFOLevelReg, 0x80);
-
-    for (i = 0; i < InLenByte; i++)
-    {
-        WriteRawRC(FIFODataReg, pInData[i]);
-    }
-    WriteRawRC(CommandReg, Command);
-
-    if (Command == PCD_TRANSCEIVE)
-    {
-        SetBitMask(BitFramingReg, 0x80);
-    }
-
-    i = 600; //????????,??M1???????25ms
-    do
-    {
-        n = ReadRawRC(ComIrqReg);
-        i--;
-    } while ((i != 0) && !(n & 0x01) && !(n & waitFor));
-    ClearBitMask(BitFramingReg, 0x80);
-
-    if (i != 0)
-    {
-        if (!(ReadRawRC(ErrorReg) & 0x1B))
-        {
-            status = MI_OK;
-            if (n & irqEn & 0x01)
-            {
-                status = MI_NOTAGERR;
-            }
-            if (Command == PCD_TRANSCEIVE)
-            {
-                n = ReadRawRC(FIFOLevelReg);
-                lastBits = ReadRawRC(ControlReg) & 0x07;
-                if (lastBits)
-                {
-                    *pOutLenBit = (n - 1) * 8 + lastBits;
-                }
-                else
-                {
-                    *pOutLenBit = n * 8;
-                }
-                if (n == 0)
-                {
-                    n = 1;
-                }
-                if (n > MAXRLEN)
-                {
-                    n = MAXRLEN;
-                }
-                for (i = 0; i < n; i++)
-                {
-                    pOutData[i] = ReadRawRC(FIFODataReg);
-                }
-            }
-        }
-        else
-        {
-            status = MI_ERR;
-        }
-    }
-
-    SetBitMask(ControlReg, 0x80); // stop timer now
-    WriteRawRC(CommandReg, PCD_IDLE);
-    return status;
 }

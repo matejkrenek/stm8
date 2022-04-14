@@ -98,6 +98,10 @@ typedef struct
     void (*writeRegister)(uint8_t, uint8_t);
     uint8_t (*readReagister)(uint8_t);
     void (*antennaOn)();
+    bool (*request)(uint8_t *, uint8_t *);
+    bool (*communicateWithPICC)(uint8_t, uint8_t *, uint8_t, uint8_t *, uint8_t *);
+    void (*clearBitMast)(uint8_t, uint8_t);
+    void (*setBitMask)(uint8_t, uint8_t);
 } RC522_Module;
 
 extern Pin *RC522_SDA;
@@ -111,6 +115,10 @@ uint8_t RC522_Reset(void);
 void RC522_WriteRegister(uint8_t address, uint8_t data);
 uint8_t RC522_ReadRegister(uint8_t address);
 void RC522_AntennaOn(void);
+bool RC522_Request(uint8_t *buffer, uint8_t *bufferSize);
+bool RC522_CommunicateWithPICC(uint8_t command, uint8_t *sendData, uint8_t sendLen, uint8_t *backData, uint8_t *backLen);
+void RC522_ClearBitMask(uint8_t address, uint8_t mask);
+void RC522_SetBitMask(uint8_t address, uint8_t mask);
 
 char PcdRequest(unsigned char req_code, unsigned char *pTagType);
 char PcdAnticoll(unsigned char *pSnr);
@@ -121,14 +129,7 @@ char PcdWrite(unsigned char addr, unsigned char *pData);
 char PcdValue(unsigned char dd_mode, unsigned char addr, unsigned char *pValue);
 char PcdBakValue(unsigned char sourceaddr, unsigned char goaladdr);
 char PcdHalt(void);
-char PcdComMF522(unsigned char Command,
-                 unsigned char *pInData,
-                 unsigned char InLenByte,
-                 unsigned char *pOutData,
-                 unsigned int *pOutLenBit);
 void CalulateCRC(unsigned char *pIndata, unsigned char len, unsigned char *pOutData);
-void SetBitMask(unsigned char reg, unsigned char mask);
-void ClearBitMask(unsigned char reg, unsigned char mask);
 extern const RC522_Module RC522;
 
 #endif
