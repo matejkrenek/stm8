@@ -123,7 +123,7 @@ typedef enum
 typedef enum
 {
   CLK_PERIPHERAL_I2C = (uint8_t)0x00, /*!< Peripheral Clock Enable 1, T_I2C */
-  CLK_PERIPHERAL_SPI = (uint8_t)0x01, /*!< Peripheral Clock Enable 1, SPI */
+  CLK_PERIPHERAL_SPI = (uint8_t)0x01, /*!< Peripheral Clock Enable 1, T_SPI */
 #if defined(STM8S208) || defined(STM8S207) || defined(STM8S007) || defined(STM8AF52Ax) || defined(STM8AF62Ax)
   CLK_PERIPHERAL_UART1 = (uint8_t)0x02, /*!< Peripheral Clock Enable 1, UART1 */
 #else
@@ -215,8 +215,10 @@ typedef struct
   void (*deinit)();
   void (*HSI)(CLK_Prescaler_TypeDef);
   void (*SYS)(CLK_Prescaler_TypeDef);
-  uint32_t (*GetFrequency)(void);
-  CLK_Source_TypeDef (*GetSYSSource)(void);
+  void (*peripheralEnable)(CLK_Peripheral_TypeDef);
+  void (*peripheralDisable)(CLK_Peripheral_TypeDef);
+  uint32_t (*getFrequency)(void);
+  CLK_Source_TypeDef (*getSYSSource)(void);
 } CLK_Module;
 
 /**
@@ -377,6 +379,8 @@ void CLK_ClockSwitchCmd(FunctionalState NewState);
 void CLK_FastHaltWakeUpCmd(FunctionalState NewState);
 void CLK_SlowActiveHaltWakeUpCmd(FunctionalState NewState);
 void CLK_PeripheralClockConfig(CLK_Peripheral_TypeDef CLK_Peripheral, FunctionalState NewState);
+void CLK_PeripheralEnable(CLK_Peripheral_TypeDef CLK_Peripheral);
+void CLK_PeripheralDisable(CLK_Peripheral_TypeDef CLK_Peripheral);
 ErrorStatus CLK_ClockSwitchConfig(CLK_SwitchMode_TypeDef CLK_SwitchMode, CLK_Source_TypeDef CLK_NewClock, FunctionalState ITState, CLK_CurrentClockState_TypeDef CLK_CurrentClockState);
 void CLK_HSIPrescalerConfig(CLK_Prescaler_TypeDef HSIPrescaler);
 void CLK_CCOConfig(CLK_Output_TypeDef CLK_CCO);

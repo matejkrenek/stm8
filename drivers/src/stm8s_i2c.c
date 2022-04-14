@@ -53,6 +53,17 @@
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
+const I2C_Module I2C = {
+    .init = I2C_Init,
+    .deinit = I2C_DeInit,
+    .enable = I2C_Enable,
+    .disable = I2C_Disable,
+    .start = I2C_Start,
+    .stop = I2C_Stop,
+    .sendData = I2C_SendData,
+    .sendAddress = I2C_Send7bitAddress,
+};
+
 /**
  * @addtogroup I2C_Public_Functions
  * @{
@@ -291,6 +302,16 @@ void I2C_GenerateSTOP(FunctionalState NewState)
     /* Disable the STOP condition generation */
     T_I2C->CR2 &= (uint8_t)(~I2C_CR2_STOP);
   }
+}
+
+void I2C_Start(void)
+{
+  I2C_GenerateSTART(ENABLE);
+}
+
+void I2C_Stop(void)
+{
+  I2C_GenerateSTOP(ENABLE);
 }
 
 /**
@@ -886,13 +907,6 @@ void I2C_ClearITPendingBit(I2C_ITPendingBit_TypeDef I2C_ITPendingBit)
   /* Clear the selected T_I2C flag */
   T_I2C->SR2 = (uint8_t)((uint16_t)~flagpos);
 }
-
-const I2C_Module I2C = {
-    .init = I2C_Init,
-    .deinit = I2C_DeInit,
-    .enable = I2C_Enable,
-    .disable = I2C_Disable,
-};
 
 /**
  * @}

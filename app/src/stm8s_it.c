@@ -197,7 +197,7 @@ onInterrupt(CAN_TX_IRQHandler, 9)
 #endif /*STM8S208 || STM8AF52Ax */
 
 /**
- * @brief  SPI Interrupt routine
+ * @brief  T_SPI Interrupt routine
  * @param  None
  * @retval None
  */

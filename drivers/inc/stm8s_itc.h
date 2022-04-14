@@ -61,7 +61,7 @@ typedef enum
   ITC_IRQ_PORTF = (uint8_t)8, /*!< Port F external interrupts */
 #endif                        /*STM8S903 or STM8AF622x */
 
-  ITC_IRQ_SPI = (uint8_t)10,         /*!< SPI interrupt */
+  ITC_IRQ_SPI = (uint8_t)10,         /*!< T_SPI interrupt */
   ITC_IRQ_TIM1_OVF = (uint8_t)11,    /*!< TIM1 update/overflow/underflow/trigger/
                                      break interrupt*/
   ITC_IRQ_TIM1_CAPCOM = (uint8_t)12, /*!< TIM1 capture/compare interrupt */

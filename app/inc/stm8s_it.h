@@ -62,7 +62,7 @@ INTERRUPT void CAN_RX_IRQHandler(void); /* CAN RX */
 INTERRUPT void CAN_TX_IRQHandler(void); /* CAN TX/ER/SC */
 #endif                                  /* (STM8S208) || (STM8AF52Ax) */
 
-INTERRUPT void SPI_IRQHandler(void);                  /* SPI */
+INTERRUPT void SPI_IRQHandler(void);                  /* T_SPI */
 INTERRUPT void TIM1_CAP_COM_IRQHandler(void);         /* TIM1 CAP/COM */
 INTERRUPT void TIM1_UPD_OVF_TRG_BRK_IRQHandler(void); /* TIM1 UPD/OVF/TRG/BRK */
 
@@ -138,7 +138,7 @@ onInterrupt(CAN_RX_IRQHandler, 8);       /* CAN RX */
 onInterrupt(CAN_TX_IRQHandler, 9);       /* CAN TX/ER/SC */
 #endif /* (STM8S208) || (STM8AF52Ax) */
 
-onInterrupt(SPI_IRQHandler, 10);                  /* SPI */
+onInterrupt(SPI_IRQHandler, 10);                  /* T_SPI */
 onInterrupt(TIM1_UPD_OVF_TRG_BRK_IRQHandler, 11); /* TIM1 UPD/OVF/TRG/BRK */
 onInterrupt(TIM1_CAP_COM_IRQHandler, 12);         /* TIM1 CAP/COM */
 

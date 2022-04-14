@@ -95,6 +95,9 @@ typedef struct
 {
     void (*init)();
     void (*reset)();
+    void (*writeRegister)(uint8_t, uint8_t);
+    uint8_t (*readReagister)(uint8_t);
+    void (*antennaOn)();
 } RC522_Module;
 
 extern Pin *RC522_SDA;
@@ -105,8 +108,10 @@ extern Pin *RC522_RST;
 
 void RC522_Init(void);
 uint8_t RC522_Reset(void);
-void PcdAntennaOn(void);
-void PcdAntennaOff(void);
+void RC522_WriteRegister(uint8_t address, uint8_t data);
+uint8_t RC522_ReadRegister(uint8_t address);
+void RC522_AntennaOn(void);
+
 char PcdRequest(unsigned char req_code, unsigned char *pTagType);
 char PcdAnticoll(unsigned char *pSnr);
 char PcdSelect(unsigned char *pSnr);
@@ -122,8 +127,6 @@ char PcdComMF522(unsigned char Command,
                  unsigned char *pOutData,
                  unsigned int *pOutLenBit);
 void CalulateCRC(unsigned char *pIndata, unsigned char len, unsigned char *pOutData);
-void WriteRawRC(unsigned char Address, unsigned char value);
-unsigned char ReadRawRC(unsigned char Address);
 void SetBitMask(unsigned char reg, unsigned char mask);
 void ClearBitMask(unsigned char reg, unsigned char mask);
 extern const RC522_Module RC522;

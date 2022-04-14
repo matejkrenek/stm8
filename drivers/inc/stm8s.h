@@ -622,7 +622,7 @@ typedef struct CLK_struct
 #define CLK_PCKENR1_UART3 ((uint8_t)0x08) /*!< UART3 clock enable */
 #define CLK_PCKENR1_UART2 ((uint8_t)0x08) /*!< UART2 clock enable */
 #define CLK_PCKENR1_UART1 ((uint8_t)0x04) /*!< UART1 clock enable */
-#define CLK_PCKENR1_SPI ((uint8_t)0x02)   /*!< SPI clock enable */
+#define CLK_PCKENR1_SPI ((uint8_t)0x02)   /*!< T_SPI clock enable */
 #define CLK_PCKENR1_I2C ((uint8_t)0x01)   /*!< T_I2C clock enable */
 
 #define CLK_PCKENR2_CAN ((uint8_t)0x80) /*!< CAN clock enable */
@@ -1718,19 +1718,19 @@ typedef struct RST_struct
 
 /*----------------------------------------------------------------------------*/
 /**
- * @brief  Serial Peripheral Interface (SPI)
+ * @brief  Serial Peripheral Interface (T_SPI)
  */
 
 typedef struct SPI_struct
 {
-  __IO uint8_t CR1;    /*!< SPI control register 1 */
-  __IO uint8_t CR2;    /*!< SPI control register 2 */
-  __IO uint8_t ICR;    /*!< SPI interrupt control register */
-  __IO uint8_t SR;     /*!< SPI status register */
-  __IO uint8_t DR;     /*!< SPI data I/O register */
-  __IO uint8_t CRCPR;  /*!< SPI CRC polynomial register */
-  __IO uint8_t RXCRCR; /*!< SPI Rx CRC register */
-  __IO uint8_t TXCRCR; /*!< SPI Tx CRC register */
+  __IO uint8_t CR1;    /*!< T_SPI control register 1 */
+  __IO uint8_t CR2;    /*!< T_SPI control register 2 */
+  __IO uint8_t ICR;    /*!< T_SPI interrupt control register */
+  __IO uint8_t SR;     /*!< T_SPI status register */
+  __IO uint8_t DR;     /*!< T_SPI data I/O register */
+  __IO uint8_t CRCPR;  /*!< T_SPI CRC polynomial register */
+  __IO uint8_t RXCRCR; /*!< T_SPI Rx CRC register */
+  __IO uint8_t TXCRCR; /*!< T_SPI Tx CRC register */
 } SPI_TypeDef;
 
 /** @addtogroup SPI_Registers_Reset_Value
@@ -2670,7 +2670,7 @@ typedef struct CFG_struct
 #define WWDG ((WWDG_TypeDef *)WWDG_BaseAddress)
 #define IWDG ((IWDG_TypeDef *)IWDG_BaseAddress)
 
-#define SPI ((SPI_TypeDef *)SPI_BaseAddress)
+#define T_SPI ((SPI_TypeDef *)SPI_BaseAddress)
 #define T_I2C ((I2C_TypeDef *)I2C_BaseAddress)
 
 #if defined(STM8S208) || defined(STM8S207) || defined(STM8S007) || defined(STM8S103) || \

@@ -6,6 +6,7 @@
 void setup(void)
 {
     CLK.HSI(HSIDIV1);
+    CLK.SYS(CPUDIV1);
     LCD.init(0x26, 16, 2);
     RFID.init();
 

@@ -329,6 +329,10 @@ typedef struct
   void (*deinit)();
   void (*enable)();
   void (*disable)();
+  void (*start)();
+  void (*stop)();
+  void (*sendData)(uint8_t);
+  void (*sendAddress)(uint8_t, I2C_Direction_TypeDef);
 } I2C_Module;
 
 /**
@@ -515,6 +519,8 @@ void I2C_Cmd(FunctionalState NewState);
 void I2C_GeneralCallCmd(FunctionalState NewState);
 void I2C_GenerateSTART(FunctionalState NewState);
 void I2C_GenerateSTOP(FunctionalState NewState);
+void I2C_Start(void);
+void I2C_Stop(void);
 void I2C_SoftwareResetCmd(FunctionalState NewState);
 void I2C_StretchClockCmd(FunctionalState NewState);
 void I2C_AcknowledgeConfig(I2C_Ack_TypeDef Ack);

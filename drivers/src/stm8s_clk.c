@@ -295,6 +295,16 @@ void CLK_PeripheralClockConfig(CLK_Peripheral_TypeDef CLK_Peripheral, Functional
   }
 }
 
+void CLK_PeripheralEnable(CLK_Peripheral_TypeDef CLK_Peripheral)
+{
+  CLK_PeripheralClockConfig(CLK_Peripheral, ENABLE);
+}
+
+void CLK_PeripheralDisable(CLK_Peripheral_TypeDef CLK_Peripheral)
+{
+  CLK_PeripheralClockConfig(CLK_Peripheral, DISABLE);
+}
+
 /**
  * @brief  configures the Switch from one clock to another
  * @param   CLK_SwitchMode select the clock switch mode.
@@ -747,8 +757,10 @@ const CLK_Module CLK = {
     .deinit = CLK_DeInit,
     .HSI = CLK_HSIPrescalerConfig,
     .SYS = CLK_SYSCLKConfig,
-    .GetFrequency = CLK_GetClockFreq,
-    .GetSYSSource = CLK_GetSYSCLKSource,
+    .peripheralEnable = CLK_PeripheralEnable,
+    .peripheralDisable = CLK_PeripheralDisable,
+    .getFrequency = CLK_GetClockFreq,
+    .getSYSSource = CLK_GetSYSCLKSource,
 };
 
 /**

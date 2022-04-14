@@ -10,20 +10,112 @@ Pin *RC522_RST;
 const RC522_Module RFID = {
     .init = RC522_Init,
     .reset = RC522_Reset,
+    .writeRegister = RC522_WriteRegister,
+    .readRegister = RC522_ReadRegister,
+    .antennaOn = RC522_AntennaOn,
 };
 
-void RC522_Init(void)
+void RC522_PCD_Init(void)
 {
-    CLK_PeripheralClockConfig(CLK_PERIPHERAL_SPI, ENABLE);
+    // configure pinouts
     RC522_SDA = GPIO.init(GPIOC, PIN_4, OUTPUT_PP_HIGH_SLOW);
     RC522_SCK = GPIO.init(GPIOC, PIN_5, OUTPUT_PP_HIGH_SLOW);
     RC522_MOSI = GPIO.init(GPIOC, PIN_6, OUTPUT_PP_HIGH_SLOW);
     RC522_MISO = GPIO.init(GPIOC, PIN_7, INPUT_PU_NO_IT);
     RC522_RST = GPIO.init(GPIOC, PIN_3, OUTPUT_PP_HIGH_SLOW);
-    SPI_DeInit();
-    SPI_Init(SPI_FIRSTBIT_MSB, SPI_BAUDRATEPRESCALER_4, SPI_MODE_MASTER, SPI_CLOCKPOLARITY_HIGH, SPI_CLOCKPHASE_2EDGE, SPI_DATADIRECTION_2LINES_FULLDUPLEX, SPI_NSS_SOFT, 0x07);
+
+    // enable peripheral SPI clock
+    CLK.peripheralEnable(CLK_PERIPHERAL_SPI);
+
+    // configure SPI for RC522
+    SPI.deinit();
+    SPI.init(SPI_FIRSTBIT_MSB, SPI_BAUDRATEPRESCALER_4, SPI_MODE_MASTER, SPI_CLOCKPOLARITY_HIGH, SPI_CLOCKPHASE_2EDGE, SPI_DATADIRECTION_2LINES_FULLDUPLEX, SPI_NSS_SOFT, 0x07);
     delay.ms(500);
-    SPI_Cmd(ENABLE);
+    SPI.enable();
+
+    // soft reset
+    RFID.reset();
+
+    // reset baud rates
+    RFID.writeRegister(TxModeReg, 0x00);
+    RFID.writeRegister(RxModeReg, 0x00);
+    RFID.writeRegister(ModWidthReg, 0x26);
+
+    RFID.writeRegister(TModeReg, 0x80);      // TAuto=1; timer starts automatically at the end of the transmission in all communication modes at all speeds
+    RFID.writeRegister(TPrescalerReg, 0xA9); // TPreScaler = TModeReg[3..0]:TPrescalerReg, ie 0x0A9 = 169 => f_timer=40kHz, ie a timer period of 25μs.
+    RFID.writeRegister(TReloadRegH, 0x03);   // Reload timer with 0x3E8 = 1000, ie 25ms before timeout.
+    RFID.writeRegister(TReloadRegL, 0xE8);
+
+    RFID.writeRegister(TxASKReg, 0x40); // Default 0x00. Force a 100 % ASK modulation independent of the ModGsPReg register setting
+    RFID.writeRegister(ModeReg, 0x3D);  // Default 0x3F. Set the preset value for the CRC coprocessor for the CalcCRC command to 0x6363 (ISO 14443-3 part 6.2.4)
+    RFID.antennaOn();
+}
+
+void RC522_Reset(void)
+{
+    RFID.writeRegister(CommandReg, PCD_SoftReset);
+
+    uint8_t count = 0;
+    do
+    {
+        delay.ms(50);
+    } while ((RFID.readRegister(CommandReg) & (1 << 4)) && (++count) < 3);
+}
+
+void RC522_WriteRegister(uint8_t address, uint8_t data)
+{
+    GPIO.writeLow(RC522_SDA);
+
+    SPI.sendData(address << 1);
+
+    while (SPI.getFlag(SPI_FLAG_TXE))
+        ;
+    while (!SPI.getFlag(SPI_FLAG_RXNE))
+        ;
+
+    SPI.sendData(data);
+
+    while (SPI.getFlag(SPI_FLAG_TXE))
+        ;
+    while (!SPI.getFlag(SPI_FLAG_RXNE))
+        ;
+
+    GPIO.writeHigh(RC522_SDA);
+}
+
+uint8_t RC522_ReadRegister(uint8_t address)
+{
+    uint8_t data;
+
+    GPIO.writeLow(RC522_SDA);
+    SPI.sendData((address << 1) | 0x80);
+
+    while (SPI.getFlag(SPI_FLAG_TXE))
+        ;
+    while (!SPI.getFlag(SPI_FLAG_RXNE))
+        ;
+
+    SPI.sendData(0x00);
+
+    while (SPI.getFlag(SPI_FLAG_TXE))
+        ;
+    while (!SPI.getFlag(SPI_FLAG_RXNE))
+        ;
+
+    data = SPI.receiveData();
+    GPIO.writeHigh(RC522_SDA);
+
+    return data;
+}
+
+void RC522_AntennaOn(void)
+{
+    uint8_t value = RFID.readReagister(TxControlReg);
+
+    if ((value & 0x03) != 0x03)
+    {
+        RFID.writeRegister(TxControlReg, value | 0x03);
+    }
 }
 
 #define MAXRLEN 18
@@ -403,28 +495,6 @@ void CalulateCRC(unsigned char *pIndata, unsigned char len, unsigned char *pOutD
     pOutData[1] = ReadRawRC(CRCResultRegM);
 }
 
-uint8_t RC522_Reset(void)
-{
-    GPIO.writeHigh(RC522_RST);
-    nop();
-    GPIO.writeLow(RC522_RST);
-    nop();
-    GPIO.writeHigh(RC522_RST);
-    nop();
-    WriteRawRC(CommandReg, PCD_RESETPHASE);
-    nop();
-
-    WriteRawRC(TModeReg, 0x80);      // TAuto=1; timer starts automatically at the end of the transmission in all communication modes at all speeds
-    WriteRawRC(TPrescalerReg, 0xA9); // TPreScaler = TModeReg[3..0]:TPrescalerReg, ie 0x0A9 = 169 => f_timer=40kHz, ie a timer period of 25?s.
-    WriteRawRC(TReloadRegH, 0x03);   // Reload timer with 0x3E8 = 1000, ie 25ms before timeout.
-    WriteRawRC(TReloadRegL, 0xE8);
-
-    WriteRawRC(TxAutoReg, 0x40); // Default 0x00. Force a 100 % ASK modulation independent of the ModGsPReg register setting
-    WriteRawRC(ModeReg, 0x3D);   // Default 0x3F. Set the preset value for the CRC coprocessor for the CalcCRC command to 0x6363 (ISO 14443-3 part 6.2.4)
-    PcdAntennaOn();              // Enable the antenna driver pins TX1 and TX2
-    return MI_OK;
-}
-
 /////////////////////////////////////////////////////////////////////
 char test;
 void SetBitMask(unsigned char reg, unsigned char mask)
@@ -549,151 +619,4 @@ char PcdComMF522(unsigned char Command,
     SetBitMask(ControlReg, 0x80); // stop timer now
     WriteRawRC(CommandReg, PCD_IDLE);
     return status;
-}
-
-/////////////////////////////////////////////////////////////////////
-//????
-//?????????????????1ms???
-/////////////////////////////////////////////////////////////////////
-char test = 0;
-void PcdAntennaOn()
-{
-    unsigned char i;
-    i = ReadRawRC(TxControlReg);
-    test = i;
-    if (!(i & 0x03))
-    {
-        SetBitMask(TxControlReg, 0x03);
-    }
-}
-
-/////////////////////////////////////////////////////////////////////
-void PcdAntennaOff()
-{
-    ClearBitMask(TxControlReg, 0x03);
-}
-
-/////////////////////////////////////////////////////////////////////
-void WriteRawRC(unsigned char Address, unsigned char value)
-{
-    uint8_t i, ucAddr, temp;
-    GPIO.writeLow(RC522_SDA);
-
-    ucAddr = ((Address << 1) & 0x7E);
-
-    //    for(i=8;i>0;i--)
-    //    {
-    //        //MF522_SI = ((ucAddr&0x80)==0x80);
-    //        if((ucAddr&0x80)==0x80)
-    //        MF522_MOSI_H;
-    //        else
-    //        MF522_MOSI_L;
-    //        //MF522_SCK = 1;
-    //        MF522_SCK_H;
-    //        ucAddr <<= 1;
-    //        //MF522_SCK = 0;
-    //        MF522_SCK_L;
-    //    }
-    SPI->DR = ucAddr;
-
-    while ((SPI->SR & SPI_SR_TXE) == 0)
-    {
-        /* Wait while the byte is transmitted */
-    }
-    ///
-    while (SPI_GetFlagStatus(SPI_FLAG_RXNE) == RESET)
-    {
-    }
-    /* Store the received byte in the RxBuffer2 */
-    temp = SPI->DR;
-    //    for(i=8;i>0;i--)
-    //    {
-    //        //MF522_SI = ((value&0x80)==0x80);
-    //        if((value&0x80)==0x80)
-    //        MF522_MOSI_H;
-    //        else
-    //        MF522_MOSI_L;
-    //        //MF522_SCK = 1;
-    //        MF522_SCK_H;
-    //        value <<= 1;
-    //        //MF522_SCK = 0;
-    //        MF522_SCK_L;
-    //    }
-    SPI->DR = value;
-
-    while ((SPI->SR & SPI_SR_TXE) == 0)
-    {
-        /* Wait while the byte is transmitted */
-    }
-    ///
-    while (SPI_GetFlagStatus(SPI_FLAG_RXNE) == RESET)
-    {
-    }
-    /* Store the received byte in the RxBuffer2 */
-    temp = SPI->DR;
-    CS_H;
-    //    MF522_SCK_H;
-}
-/////////////////////////////////////////////////////////////////////
-char temp = 0;
-unsigned char ReadRawRC(unsigned char Address)
-{
-    unsigned char i, ucAddr;
-    unsigned char ucResult = 0;
-
-    //     MF522_SCK_L;
-    CS_L;
-    ucAddr = ((Address << 1) & 0x7E) | 0x80;
-
-    //     for(i=8;i>0;i--)
-    //     {
-    //         //MF522_SI = ((ucAddr&0x80)==0x80);
-    //         if((ucAddr&0x80)==0x80)
-    //         MF522_MOSI_H;
-    //         else
-    //         MF522_MOSI_L;
-    //         //MF522_SCK = 1;
-    //         MF522_SCK_H;
-    //         ucAddr <<= 1;
-    //         //MF522_SCK = 0;
-    //         MF522_SCK_L;
-    //     }
-    SPI->DR = ucAddr;
-
-    while ((SPI->SR & SPI_SR_TXE) == 0)
-    {
-        /* Wait while the byte is transmitted */
-    }
-    ///
-    while (SPI_GetFlagStatus(SPI_FLAG_RXNE) == RESET)
-    {
-    }
-    /* Store the received byte in the RxBuffer2 */
-    temp = SPI->DR;
-    //     for(i=8;i>0;i--)
-    //     {
-    //         //MF522_SCK = 1;
-    //         MF522_SCK_H;
-    //         ucResult <<= 1;
-    //         //ucResult|=(bit)MF522_SO;
-    //         if((MF522_MISO&0x80)==0x80)//1000.0000
-    //         ucResult|=1;
-    //         //MF522_SCK = 0;
-    //         MF522_SCK_L;
-    //     }
-    SPI->DR = 0x00;
-
-    while ((SPI->SR & SPI_SR_TXE) == 0)
-    {
-        /* Wait while the byte is transmitted */
-    }
-    /* Wait the byte is entirely received by SPI */
-    while (SPI_GetFlagStatus(SPI_FLAG_RXNE) == RESET)
-    {
-    }
-    /* Store the received byte in the RxBuffer2 */
-    ucResult = SPI->DR;
-    CS_H;
-    // MF522_SCK_H;
-    return ucResult;
 }

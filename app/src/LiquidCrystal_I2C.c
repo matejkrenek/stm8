@@ -55,7 +55,7 @@ void LiquidCrystal_I2C_Init(uint8_t address, uint8_t cols, uint8_t rows)
     SCL = GPIO.init(GPIOE, PIN_1, OUTPUT_PP_HIGH_FAST);
 
     I2C.deinit();
-    I2C.init(100000, _lcd_address, I2C_DUTYCYCLE_2, I2C_ACK_CURR, I2C_ADDMODE_7BIT, 16);
+    I2C.init(100000, _lcd_address, I2C_DUTYCYCLE_2, I2C_ACK_CURR, I2C_ADDMODE_7BIT, CLK.getFrequency() / 1000000);
     I2C.enable();
 
     delay.ms(50);
@@ -82,22 +82,22 @@ void LiquidCrystal_I2C_Write(uint8_t slave_address, uint8_t data)
     while (I2C_GetFlagStatus(I2C_FLAG_BUSBUSY))
         ;
 
-    I2C_GenerateSTART(ENABLE);
+    I2C.start();
 
     while (!I2C_CheckEvent(I2C_EVENT_MASTER_MODE_SELECT))
         ;
 
-    I2C_Send7bitAddress(slave_address, I2C_DIRECTION_TX);
+    I2C.sendAddress(slave_address, I2C_DIRECTION_TX);
 
     while (!I2C_CheckEvent(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))
         ;
 
-    I2C_SendData(data);
+    I2C.sendData(data);
 
     while (!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED))
         ;
 
-    I2C_GenerateSTOP(ENABLE);
+    I2C.stop();
 }
 
 void LiquidCrystal_I2C_ExpanderWrite(uint8_t data)
