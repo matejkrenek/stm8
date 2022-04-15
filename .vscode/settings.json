@@ -2,6 +2,9 @@
     "files.associations": {
         "type_traits": "c",
         "liquidcrystal_i2c.h": "c",
-        "rc522.h": "c"
+        "rc522.h": "c",
+        "stm8s_delay.h": "c",
+        "stdlib.h": "c",
+        "milis.h": "c"
     }
 }

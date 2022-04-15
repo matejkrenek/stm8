@@ -26,6 +26,7 @@ typedef struct
   void (*ms)(uint32_t);
   void (*us)(uint32_t);
 } Delay_Module;
+
 /**
  * @}
  */

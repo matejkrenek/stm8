@@ -8,9 +8,12 @@ Pin *LED_GREEN;
 Pin *LED_RED;
 char MasterTag[] = "4759AC8";
 char TagID[] = "";
+bool getID();
 
 void setup(void)
 {
+    // GPIO_Init(GPIOB, (), )
+
     CLK.HSI(HSIDIV1);
     CLK.SYS(CPUDIV1);
     milis.init();
@@ -50,6 +53,7 @@ void loop(void)
         LCD.print(TagID);
 
         delay.ms(2000);
+
         GPIO.writeLow(LED_GREEN);
         GPIO.writeLow(LED_RED);
 

@@ -9,7 +9,7 @@
  */
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm8s.h"
+#include "stm8s_delay.h"
 
 /** @addtogroup STM8S_StdPeriph_Driver
  * @{
