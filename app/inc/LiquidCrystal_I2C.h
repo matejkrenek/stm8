@@ -65,11 +65,17 @@ typedef struct
 
 } LiquidCrystal_I2C_Module;
 
+// LCD.init(0x26, 16, 2);
+// LCD.setCursor(1, 0);
+// LCD.print("Hello World!");
+
 extern uint8_t _lcd_address;
 extern uint8_t _lcd_cols;
 extern uint8_t _lcd_rows;
 extern uint8_t _lcd_backlight;
 extern uint8_t _lcd_displayfunction;
+extern uint8_t _lcd_displaycontrol;
+extern uint8_t _lcd_displaymode;
 extern Pin *SDA;
 extern Pin *SCL;
 

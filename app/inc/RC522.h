@@ -98,11 +98,34 @@ typedef struct
     void (*writeRegister)(uint8_t, uint8_t);
     uint8_t (*readReagister)(uint8_t);
     void (*antennaOn)();
-    bool (*request)(uint8_t *, uint8_t *);
-    bool (*communicateWithPICC)(uint8_t, uint8_t *, uint8_t, uint8_t *, uint8_t *);
+    RC522_StatusCode (*requestA)(uint8_t *, uint8_t *);
+    RC522_StatusCode (*REQA_or_WUPA)(uint8_t, uint8_t *, uint8_t *);
     void (*clearBitMast)(uint8_t, uint8_t);
     void (*setBitMask)(uint8_t, uint8_t);
+    RC522_StatusCode (*transceiveData)(uint8_t *, uint8_t, uint8_t *, uint8_t *, uint8_t *);
+    RC522_StatusCode (*communicateWithPICC)(uint8_t, uint8_t, uint8_t *, uint8_t, uint8_t *, uint8_t *, uint8_t *);
+    RC522_StatusCode (*isNewCardPresent)();
+    RC522_StatusCode (*readCardSerial)();
 } RC522_Module;
+
+typedef struct
+{
+    uint8_t size;
+    uint8_t uidByte[10];
+    uint8_t sak;
+} RC522_UID;
+
+typedef enum
+{
+    STATUS_OK,
+    STATUS_ERROR,
+    STATUS_COLLISION,
+    STATUS_TIMEOUT,
+    STATUS_NO_ROOM,
+    STATUS_INTERNAL_ERROR,
+    STATUS_INVALID,
+    STATUS_CRC_WRONG,
+} RC522_StatusCode;
 
 extern Pin *RC522_SDA;
 extern Pin *RC522_SCK;
@@ -111,25 +134,22 @@ extern Pin *RC522_MISO;
 extern Pin *RC522_RST;
 
 void RC522_Init(void);
-uint8_t RC522_Reset(void);
+void RC522_Reset(void);
 void RC522_WriteRegister(uint8_t address, uint8_t data);
 uint8_t RC522_ReadRegister(uint8_t address);
 void RC522_AntennaOn(void);
-bool RC522_Request(uint8_t *buffer, uint8_t *bufferSize);
-bool RC522_CommunicateWithPICC(uint8_t command, uint8_t *sendData, uint8_t sendLen, uint8_t *backData, uint8_t *backLen);
+RC522_StatusCode RC522_RequestA(uint8_t *bufferATQA, uint8_t *bufferSize);
+RC522_StatusCode RC522_REQA_or_WUPA(uint8_t command, uint8_t *bufferATQA, uint8_t *bufferSize);
 void RC522_ClearBitMask(uint8_t address, uint8_t mask);
 void RC522_SetBitMask(uint8_t address, uint8_t mask);
-
-char PcdRequest(unsigned char req_code, unsigned char *pTagType);
-char PcdAnticoll(unsigned char *pSnr);
-char PcdSelect(unsigned char *pSnr);
-char PcdAuthState(unsigned char auth_mode, unsigned char addr, unsigned char *pKey, unsigned char *pSnr);
-char PcdRead(unsigned char addr, unsigned char *pData);
-char PcdWrite(unsigned char addr, unsigned char *pData);
-char PcdValue(unsigned char dd_mode, unsigned char addr, unsigned char *pValue);
-char PcdBakValue(unsigned char sourceaddr, unsigned char goaladdr);
-char PcdHalt(void);
-void CalulateCRC(unsigned char *pIndata, unsigned char len, unsigned char *pOutData);
+RC522_StatusCode RC522_Select();
+RC522_StatusCode RC522_TransceiveData(uint8_t *sendData, uint8_t sendLen, uint8_t *backData, uint8_t *backLen, uint8_t *validBits);
+RC522_StatusCode RC522_CommunicateWithPICC(uint8_t command, uint8_t waitIRq, uint8_t *sendData, uint8_t sendLen, uint8_t *backData, uint8_t *backLen, uint8_t *validBits);
+bool RC522_CalculateCRC(uint8_t *data, uint8_t length, uint8_t *result);
+bool RC522_HaltA();
+RC522_StatusCode RC522_IsNewCardPresent();
+RC522_StatusCode RC522_ReadCardSerial();
 extern const RC522_Module RC522;
+extern const RC522_UID uid;
 
 #endif
