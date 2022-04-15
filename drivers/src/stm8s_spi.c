@@ -439,7 +439,8 @@ const SPI_Module SPI = {
     .disable = SPI_Disable,
     .sendData = SPI_SendData,
     .receiveData = SPI_ReceiveData,
-    .getFlag = SPI_GetFlagStatus}
+    .getFlag = SPI_GetFlagStatus,
+};
 
 /**
  * @}

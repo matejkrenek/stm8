@@ -5,12 +5,12 @@
 
 typedef struct
 {
-    void (*init)();
-    uint32_t (*get)();
+    void (*init)(void);
+    uint32_t (*get)(void);
 } MILIS_Module;
 
 void milis_init(void);
-void milis_get(void);
+uint32_t milis_get(void);
 extern const MILIS_Module milis;
 
 #endif

@@ -88,50 +88,43 @@
 #define PICC_CMD_MF_RESTORE 0xC2    // Reads the contents of a block into the internal data register.
 #define PICC_CMD_MF_TRANSFER 0xB0   // Writes the contents of the internal data register to a block.
 
-// Status
-#define MI_OK 0
-#define MI_NOTAGERR (-1)
-#define MI_ERR (-2)
-
 typedef struct
 {
     uint8_t size;
     uint8_t uidByte[10];
-    uint8_t sak;
 } RC522_UID;
 
 typedef enum
 {
-    STATUS_OK,
-    STATUS_ERROR,
-    STATUS_COLLISION,
-    STATUS_TIMEOUT,
-    STATUS_NO_ROOM,
-    STATUS_INTERNAL_ERROR,
-    STATUS_INVALID,
-    STATUS_CRC_WRONG,
-    STATUS_MIFARE_NACK = 0xff
+    STATUS_OK,                // Success
+    STATUS_ERROR,             // Error in communication
+    STATUS_COLLISION,         // Collission detected
+    STATUS_TIMEOUT,           // Timeout in communication.
+    STATUS_NO_ROOM,           // A buffer is not big enough.
+    STATUS_INTERNAL_ERROR,    // Internal error in the code. Should not happen ;-)
+    STATUS_INVALID,           // Invalid argument.
+    STATUS_CRC_WRONG,         // The CRC_A does not match
+    STATUS_MIFARE_NACK = 0xFF // A MIFARE PICC responded with NAK.
 } RC522_StatusCode;
 
 typedef struct
 {
-    void (*init)();
-    void (*reset)();
+    void (*init)(void);
+    void (*reset)(void);
+    void (*antennaOn)(void);
     void (*writeRegister)(uint8_t, uint8_t);
+    void (*writeRegisterMany)(uint8_t, uint8_t, uint8_t *);
     uint8_t (*readRegister)(uint8_t);
-    void (*readRegister2)(uint8_t, uint8_t, uint8_t *, uint8_t);
-    void (*antennaOn)();
-    RC522_StatusCode (*requestA)(uint8_t *, uint8_t *);
-    RC522_StatusCode (*REQA_or_WUPA)(uint8_t, uint8_t *, uint8_t *);
-    void (*clearBitMask)(uint8_t, uint8_t);
-    void (*setBitMask)(uint8_t, uint8_t);
-    RC522_StatusCode (*transceiveData)(uint8_t *, uint8_t, uint8_t *, uint8_t *, uint8_t *, uint8_t);
-    RC522_StatusCode (*communicateWithPICC)(uint8_t, uint8_t, uint8_t *, uint8_t, uint8_t *, uint8_t *, uint8_t *, uint8_t);
-    RC522_StatusCode (*haltA)();
+    void (*readRegisterMany)(uint8_t, uint8_t, uint8_t *, uint8_t);
+    void (*clearRegisterMask)(uint8_t, uint8_t);
+    void (*setRegisterMask)(uint8_t, uint8_t);
     RC522_StatusCode (*select)(RC522_UID *);
-    RC522_StatusCode (*calculateCRC)(uint8_t *, uint8_t, uint8_t *);
-    RC522_StatusCode (*isNewCardPresent)();
     RC522_StatusCode (*readCardSerial)();
+    RC522_StatusCode (*haltA)(void);
+    RC522_StatusCode (*calculateCRC)(uint8_t *, uint8_t, uint8_t *);
+    RC522_StatusCode (*transceiveData)(uint8_t *, uint8_t, uint8_t *, uint8_t *, uint8_t *, uint8_t, int8_t);
+    RC522_StatusCode (*communicateWithPICC)(uint8_t, uint8_t, uint8_t *, uint8_t, uint8_t *, uint8_t *, uint8_t *, uint8_t, int8_t);
+
 } RC522_Module;
 
 extern Pin *RC522_SDA;
@@ -142,22 +135,24 @@ extern Pin *RC522_RST;
 
 void RC522_Init(void);
 void RC522_Reset(void);
-void RC522_WriteRegister(uint8_t address, uint8_t data);
-uint8_t RC522_ReadRegister(uint8_t address);
-void RC522_ReadRegister2(uint8_t address, uint8_t count, uint8_t *values, uint8_t rxAlign);
 void RC522_AntennaOn(void);
-RC522_StatusCode RC522_RequestA(uint8_t *bufferATQA, uint8_t *bufferSize);
-RC522_StatusCode RC522_REQA_or_WUPA(uint8_t command, uint8_t *bufferATQA, uint8_t *bufferSize);
-void RC522_ClearBitMask(uint8_t address, uint8_t mask);
-void RC522_SetBitMask(uint8_t address, uint8_t mask);
+void RC522_WriteRegister(uint8_t reg, uint8_t value);
+void RC522_WriteRegisterMany(uint8_t reg, uint8_t count, uint8_t *values);
+
+uint8_t RC522_ReadRegister(uint8_t reg);
+void RC522_ReadRegisterMany(uint8_t reg, uint8_t count, uint8_t *value, uint8_t rxAlign);
+
+void RC522_ClearRegisterMask(uint8_t reg, uint8_t mask);
+void RC522_SetRegisterMask(uint8_t reg, uint8_t mask);
+
 RC522_StatusCode RC522_Select(RC522_UID *uid);
-RC522_StatusCode RC522_TransceiveData(uint8_t *sendData, uint8_t sendLen, uint8_t *backData, uint8_t *backLen, uint8_t *validBits, uint8_t rxAlign);
-RC522_StatusCode RC522_CommunicateWithPICC(uint8_t command, uint8_t waitIRq, uint8_t *sendData, uint8_t sendLen, uint8_t *backData, uint8_t *backLen, uint8_t *validBits, uint8_t rxAlign);
-RC522_StatusCode RC522_CalculateCRC(uint8_t *data, uint8_t length, uint8_t *result);
-RC522_StatusCode RC522_HaltA();
-RC522_StatusCode RC522_IsNewCardPresent();
 RC522_StatusCode RC522_ReadCardSerial();
+RC522_StatusCode RC522_HaltA(void);
+RC522_StatusCode RC522_CalculateCRC(uint8_t *data, uint8_t length, uint8_t *result);
+RC522_StatusCode RC522_TransceiveData(uint8_t *sendData, uint8_t sendLen, uint8_t *backData, uint8_t *backLen, uint8_t *validBits, uint8_t rxAlign, int8_t checkCRC);
+RC522_StatusCode RC522_CommunicateWithPICC(uint8_t command, uint8_t waitIRq, uint8_t *sendData, uint8_t sendLen, uint8_t *backData, uint8_t *backLen, uint8_t *validBits, uint8_t rxAlign, int8_t checkCRC);
+
 extern const RC522_Module RFID;
-extern const RC522_UID uid;
+extern RC522_UID uid;
 
 #endif

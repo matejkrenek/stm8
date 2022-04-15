@@ -17,7 +17,7 @@ void milis_init(void)
     TIM4.enable();
 }
 
-uint32_t millis_get(void)
+uint32_t milis_get(void)
 {
     return current_millis;
 }
