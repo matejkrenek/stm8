@@ -197,7 +197,7 @@ onInterrupt(CAN_TX_IRQHandler, 9)
 #endif /*STM8S208 || STM8AF52Ax */
 
 /**
- * @brief  SPI Interrupt routine
+ * @brief  T_SPI Interrupt routine
  * @param  None
  * @retval None
  */
@@ -342,7 +342,7 @@ onInterrupt(UART1_RX_IRQHandler, 18)
 #endif /*STM8S105 || STM8S001 */
 
 /**
- * @brief  I2C Interrupt routine
+ * @brief  T_I2C Interrupt routine
  * @param  None
  * @retval None
  */
@@ -457,12 +457,12 @@ onInterrupt(TIM6_UPD_OVF_TRG_IRQHandler, 23)
  * @param  None
  * @retval None
  */
-onInterrupt(TIM4_UPD_OVF_IRQHandler, 23)
-{
-    /* In order to detect unexpected events during development,
-     * it is recommended to set a breakpoint on the following instruction.
-     */
-}
+// onInterrupt(TIM4_UPD_OVF_IRQHandler, 23)
+// {
+//     /* In order to detect unexpected events during development,
+//      * it is recommended to set a breakpoint on the following instruction.
+//      */
+// }
 #endif /*STM8S903*/
 
 /**
