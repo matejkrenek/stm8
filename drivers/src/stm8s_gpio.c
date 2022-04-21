@@ -269,6 +269,7 @@ const GPIO_Module GPIO = {
     .read = GPIO_ReadInputPin,
     .readOutputData = GPIO_ReadOutputData,
     .readInputData = GPIO_ReadInputData,
+    .externalPullup = GPIO_ExternalPullUpConfig,
 };
 
 /**

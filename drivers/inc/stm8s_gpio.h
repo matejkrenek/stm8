@@ -114,6 +114,7 @@ typedef struct
   bool (*read)(Pin *);
   uint8_t (*readOutputData)(Pin *);
   uint8_t (*readInputData)(Pin *);
+  void (*externalPullup)(GPIO_TypeDef *, GPIO_Pin, FunctionalState);
 } GPIO_Module;
 
 /**

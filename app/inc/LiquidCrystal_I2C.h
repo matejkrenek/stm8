@@ -60,8 +60,10 @@ typedef struct
     void (*home)();
     void (*noBacklight)();
     void (*backlight)();
+    void (*createChar)(uint8_t, uint8_t[]);
     void (*setCursor)(uint8_t, uint8_t);
     void (*print)(uint8_t *);
+    void (*printChar)(uint8_t);
 
 } LiquidCrystal_I2C_Module;
 
@@ -91,8 +93,10 @@ void LiquidCrystal_I2C_Clear();
 void LiquidCrystal_I2C_Home();
 void LiquidCrystal_I2C_NoBacklight();
 void LiquidCrystal_I2C_Backlight();
+void LiquidCrystal_I2C_CreateChar(uint8_t location, uint8_t charmap[]);
 void LiquidCrystal_I2C_SetCursor(uint8_t col, uint8_t row);
 void LiquidCrystal_I2C_Print(uint8_t *string);
+void LiquidCrystal_I2C_PrintChar(uint8_t string);
 extern LiquidCrystal_I2C_Module LCD;
 
 #endif

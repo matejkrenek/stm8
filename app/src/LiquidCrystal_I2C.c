@@ -39,6 +39,7 @@ LiquidCrystal_I2C_Module LCD = {
     .home = LiquidCrystal_I2C_Home,
     .noBacklight = LiquidCrystal_I2C_NoBacklight,
     .backlight = LiquidCrystal_I2C_Backlight,
+    .createChar = LiquidCrystal_I2C_CreateChar,
     .setCursor = LiquidCrystal_I2C_SetCursor,
     .print = LiquidCrystal_I2C_Print,
 };
@@ -163,6 +164,16 @@ void LiquidCrystal_I2C_Backlight()
     LCD.expanderWrite(0);
 }
 
+void LiquidCrystal_I2C_CreateChar(uint8_t location, uint8_t charmap[])
+{
+    location &= 0x7;
+    LCD.command(LCD_SETCGRAMADDR | (location << 3));
+    for (int i = 0; i < 8; i++)
+    {
+        LCD.send(charmap[i], Rs);
+    }
+}
+
 void LiquidCrystal_I2C_SetCursor(uint8_t col, uint8_t row)
 {
     int row_offsets[] = {0x00, 0x40, 0x14, 0x54};
@@ -182,4 +193,9 @@ void LiquidCrystal_I2C_Print(uint8_t *string)
         LCD.send(*string, Rs);
         string++;
     }
+}
+
+void LiquidCrystal_I2C_PrintChar(uint8_t character)
+{
+    LCD.send(character, Rs);
 }
