@@ -1,34 +1,32 @@
 #include "stm8s.h"
+#include "Serial.h"
 #include "LiquidCrystal_I2C.h"
 #include <stdio.h>
 
-uint8_t ADC_Read(ADC2_Channel_TypeDef channel_number);
-uint8_t potenciometr = 200;
-char potenciometr_char[10];
+uint16_t ADC_Read(ADC2_Channel_TypeDef channel_number);
+// 65536 -> 5V
+// 65472 ->
 
 void main(void)
 {
     CLK.HSI(HSIDIV1);
-
+    Serial.begin(9600);
     LCD.init(0x26, 16, 2);
-    LCD.clear();
-    LCD.setCursor(0, 0);
-    LCD.print("Ctecka karet");
-    LCD.setCursor(0, 1);
-    LCD.print("UUD:");
+
+    LCD.print("Matej Krenek");
 
     while (1)
     {
+        uint16_t volts = (ADC_Read(ADC2_CHANNEL_0) / (65536 / 100)) * 5;
 
-        LCD.setCursor(4, 1);
-        LCD.printChar(12);
-        delay.ms(1);
+        printf("potenciometr: %u V \n", volts);
+        delay.ms(200);
     }
 }
 
-uint8_t ADC_Read(ADC2_Channel_TypeDef channel_number)
+uint16_t ADC_Read(ADC2_Channel_TypeDef channel_number)
 {
-    uint8_t result = 0;
+    uint16_t result = 0;
 
     ADC2_DeInit();
 
