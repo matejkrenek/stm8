@@ -42,6 +42,7 @@ LiquidCrystal_I2C_Module LCD = {
     .createChar = LiquidCrystal_I2C_CreateChar,
     .setCursor = LiquidCrystal_I2C_SetCursor,
     .print = LiquidCrystal_I2C_Print,
+    .printChar = LiquidCrystal_I2C_PrintChar,
 };
 
 void LiquidCrystal_I2C_Init(uint8_t address, uint8_t cols, uint8_t rows)

@@ -30,7 +30,7 @@ BUILD_DIR = build
 ########################################
 C_SOURCES = app/main.c
 C_SOURCES += $(wildcard app/src/*.c)
-# C_SOURCES += drivers/src/stm8s_adc2.c
+C_SOURCES += drivers/src/stm8s_adc2.c
 # C_SOURCES += drivers/src/stm8s_awu.c
 # C_SOURCES += drivers/src/stm8s_beep.c
 # C_SOURCES += drivers/src/stm8s_can.c

@@ -1,16 +1,21 @@
-#ifndef MILLIS_H_
-#define MILLIS_H_
+// #ifndef _MILIS_H_
+// #define _MILIS_H_ 1
 
-#include "stm8s.h"
+// #define MILIS_16BIT
+// //#define MILIS_32BIT
+// //#include "stm8s.h"
+// #include "stm8s_conf.h"
+// // configure PRESCALER and PERIOD according to your clock, to setup 1ms time base
+// #if F_CPU == 16000000
+// // varianta pro 16MHz
+// #define PRESCALER TIM4_PRESCALER_128
+// #define PERIOD (125 - 1)
+// #elif F_CPU == 2000000
+// // varianta pro 2MHz
+// #define PRESCALER TIM4_PRESCALER_16
+// #define PERIOD (125 - 1)
+// #else
+// #warning "milis timer parameters not defined for this clock !"
+// #endif
 
-typedef struct
-{
-    void (*init)(void);
-    uint32_t (*get)(void);
-} MILIS_Module;
-
-void milis_init(void);
-uint32_t milis_get(void);
-extern const MILIS_Module milis;
-
-#endif
+// #if defined(MILIS_16BIT)

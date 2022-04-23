@@ -1,8 +1,0 @@
-{
-    "files.associations": {
-        "stm8s.h": "c",
-        "type_traits": "c",
-        "stm8s_exti.h": "c"
-    },
-    "C_Cpp.errorSquiggles": "Disabled"
-}
