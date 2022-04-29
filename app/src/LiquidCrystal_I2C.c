@@ -187,7 +187,7 @@ void LiquidCrystal_I2C_SetCursor(uint8_t col, uint8_t row)
     LCD.command(LCD_SETDDRAMADDR | (col + row_offsets[row]));
 }
 
-void LiquidCrystal_I2C_Print(uint8_t *string)
+void LiquidCrystal_I2C_Print(char *string)
 {
     while (*string)
     {

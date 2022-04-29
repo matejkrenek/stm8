@@ -4,8 +4,6 @@
 #include <stdio.h>
 
 uint16_t ADC_Read(ADC2_Channel_TypeDef channel_number);
-// 65536 -> 5V
-// 65472 ->
 
 void main(void)
 {
@@ -13,13 +11,17 @@ void main(void)
     Serial.begin(9600);
     LCD.init(0x26, 16, 2);
 
-    LCD.print("Matej Krenek");
-
     while (1)
     {
         uint16_t volts = (ADC_Read(ADC2_CHANNEL_0) / (65536 / 100)) * 5;
+        char volts_char[8];
 
-        printf("potenciometr: %u V \n", volts);
+        sprintf(volts_char, "%hu", volts);
+
+        LCD.setCursor(0, 0);
+        LCD.print(volts_char);
+        LCD.setCursor(3, 0);
+        LCD.print(" mV");
         delay.ms(200);
     }
 }
