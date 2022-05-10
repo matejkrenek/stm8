@@ -126,9 +126,14 @@ typedef enum {
   ADC2_CHANNEL_15 = (uint8_t)0x0F  /**< Analog channel 15 */
 } ADC2_Channel_TypeDef;
 
+typedef struct {
+  uint16_t (*read)(ADC2_Channel_TypeDef);
+} ADC2_Module;
+
 /**
   * @}
   */
+
 
 /* Exported constants --------------------------------------------------------*/
 
@@ -246,6 +251,8 @@ FlagStatus ADC2_GetFlagStatus(void);
 void ADC2_ClearFlag(void);
 ITStatus ADC2_GetITStatus(void);
 void ADC2_ClearITPendingBit(void);
+extern const ADC2_Module ADC;
+
 /**
   * @}
   */

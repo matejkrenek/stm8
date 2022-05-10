@@ -9,7 +9,8 @@ void main(void)
 {
     CLK.HSI(HSIDIV1);
     Serial.begin(9600);
-    LCD.init(0x26, 16, 2);
+    LCD.init(0x27, 16, 2);
+    LCD.print("Pussy");
 
     while (1)
     {
@@ -17,6 +18,7 @@ void main(void)
         char volts_char[8];
 
         sprintf(volts_char, "%hu", volts);
+        printf("volts: %s mV\n", volts_char);
 
         LCD.setCursor(0, 0);
         LCD.print(volts_char);
