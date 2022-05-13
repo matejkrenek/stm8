@@ -1,52 +1,63 @@
 #include "stm8s.h"
 #include "Serial.h"
 #include "LiquidCrystal_I2C.h"
+#include "DHT.h"
 #include <stdio.h>
 
-uint16_t ADC_Read(ADC2_Channel_TypeDef channel_number);
+uint8_t bl_state;
+uint8_t data_value;
+uint8_t values[5];
+const unsigned char symbol[8] =
+{
+   0x00, 0x06, 0x09, 0x09, 0x06, 0x00, 0x00, 0x00
+};
+void clock_setup(void);
+void GPIO_setup(void);
+unsigned int make_word(unsigned char HB, unsigned char LB);
 
 void main(void)
 {
+    unsigned char state = 0x00;
+    unsigned int RH = 0x0000;
+    unsigned int t = 0x0000;
     CLK.HSI(HSIDIV1);
     Serial.begin(9600);
-    LCD.init(0x27, 16, 2);
-    LCD.print("Pussy");
+    LCD.init(0x26, 16, 2);
+    DHT11_init();
 
     while (1)
     {
-        uint16_t volts = (ADC_Read(ADC2_CHANNEL_0) / (65536 / 100)) * 5;
-        char volts_char[8];
-
-        sprintf(volts_char, "%hu", volts);
-        printf("volts: %s mV\n", volts_char);
-
+        state = get_data();
         LCD.setCursor(0, 0);
-        LCD.print(volts_char);
-        LCD.setCursor(3, 0);
-        LCD.print(" mV");
-        delay.ms(200);
+        RH = make_word(values[0], values[1]);
+        LCD.setCursor(14, 0);
+        LCD.print(values[0]);
+        LCD.setCursor(0, 1);
+        LCD.print("Tmp/");
+        LCD.setCursor(5, 1);
+        LCD.print("C:");
+        t = make_word(values[2], values[3]);
+        if((values[2] & 0x80) == 1)
+        {
+                LCD.setCursor(13, 1);
+                LCD.print("-");
+        }
+        else
+        {
+                LCD.setCursor(13, 1);
+                LCD.print(" ");
+        }
+        LCD.setCursor(14, 1);
+        LCD.print(values[2]);
+        delay.ms(1000);
     }
 }
 
-uint16_t ADC_Read(ADC2_Channel_TypeDef channel_number)
+unsigned int make_word(unsigned char HB, unsigned char LB)
 {
-    uint16_t result = 0;
-
-    ADC2_DeInit();
-
-    ADC2_Init(ADC2_CONVERSIONMODE_CONTINUOUS, channel_number, ADC2_PRESSEL_FCPU_D18, ADC2_EXTTRIG_TIM, DISABLE, ADC2_ALIGN_LEFT, ADC2_SCHMITTTRIG_ALL, DISABLE);
-
-    ADC2_Cmd(ENABLE);
-
-    ADC2_StartConversion();
-
-    while (!ADC2_GetFlagStatus())
-        ;
-
-    result = ADC2_GetConversionValue();
-    ADC2_ClearFlag();
-
-    ADC2_DeInit();
-
-    return result;
+  unsigned int value = 0x0000;
+  value = HB;
+  value <<= 8;
+  value |= LB;
+  return value;
 }
