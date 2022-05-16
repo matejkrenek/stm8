@@ -82,8 +82,8 @@ INTERRUPT void TIM3_CAP_COM_IRQHandler(void);     /* TIM3 CAP/COM */
 
 #if defined(STM8S208) || defined(STM8S207) || defined(STM8S007) || defined(STM8S103) || \
     defined(STM8S003) || defined(STM8S001) || defined(STM8AF52Ax) || defined(STM8AF62Ax) || defined(STM8S903)
-INTERRUPT void UART1_TX_IRQHandler(void); /* UART1 TX */
-INTERRUPT void UART1_RX_IRQHandler(void); /* UART1 RX */
+INTERRUPT void UART1_TX_IRQHandler(void); /* T_UART1 TX */
+INTERRUPT void UART1_RX_IRQHandler(void); /* T_UART1 RX */
 #endif                                    /* (STM8S208) || (STM8S207) || (STM8S007) || (STM8S103) || (STM8S003) || (STM8S001) || (STM8AF52Ax) || (STM8AF62Ax) || (STM8S903) */
 
 #if defined(STM8AF622x)                   // SDCC patch: add STM8AF622x
@@ -158,8 +158,8 @@ onInterrupt(TIM3_CAP_COM_IRQHandler, 16);         /* TIM3 CAP/COM */
 
 #if defined(STM8S208) || defined(STM8S207) || defined(STM8S007) || defined(STM8S103) || \
     defined(STM8S003) || defined(STM8S001) || defined(STM8AF52Ax) || defined(STM8AF62Ax) || defined(STM8S903)
-onInterrupt(UART1_TX_IRQHandler, 17);             /* UART1 TX */
-onInterrupt(UART1_RX_IRQHandler, 18);             /* UART1 RX */
+onInterrupt(UART1_TX_IRQHandler, 17);             /* T_UART1 TX */
+onInterrupt(UART1_RX_IRQHandler, 18);             /* T_UART1 RX */
 #endif /* (STM8S208) || (STM8S207) || (STM8S903) || (STM8S103) || (STM8S001) || (STM8AF52Ax) || (STM8AF62Ax) */
 
 #if defined(STM8AF622x)

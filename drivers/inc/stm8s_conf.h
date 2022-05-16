@@ -87,6 +87,7 @@
 #include "stm8s_wwdg.h"
 #include "stm8s_delay.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/

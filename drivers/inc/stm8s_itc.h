@@ -80,8 +80,8 @@ typedef enum
 
 #if defined(STM8S208) || defined(STM8S207) || defined(STM8S007) || defined(STM8S103) || \
     defined(STM8S003) || defined(STM8S001) || defined(STM8S903) || defined(STM8AF52Ax) || defined(STM8AF62Ax)
-  ITC_IRQ_UART1_TX = (uint8_t)17, /*!< UART1 TX interrupt */
-  ITC_IRQ_UART1_RX = (uint8_t)18, /*!< UART1 RX interrupt */
+  ITC_IRQ_UART1_TX = (uint8_t)17, /*!< T_UART1 TX interrupt */
+  ITC_IRQ_UART1_RX = (uint8_t)18, /*!< T_UART1 RX interrupt */
 #endif                            /*STM8S208 or STM8S207 or STM8S007 or STM8S103 or STM8S003 or STM8S001 or STM8S903 or STM8AF52Ax or STM8AF62Ax */
 #if defined(STM8AF622x)
   ITC_IRQ_UART4_TX = (uint8_t)17, /*!< UART4 TX interrupt */

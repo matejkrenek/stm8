@@ -125,9 +125,9 @@ typedef enum
   CLK_PERIPHERAL_I2C = (uint8_t)0x00, /*!< Peripheral Clock Enable 1, T_I2C */
   CLK_PERIPHERAL_SPI = (uint8_t)0x01, /*!< Peripheral Clock Enable 1, T_SPI */
 #if defined(STM8S208) || defined(STM8S207) || defined(STM8S007) || defined(STM8AF52Ax) || defined(STM8AF62Ax)
-  CLK_PERIPHERAL_UART1 = (uint8_t)0x02, /*!< Peripheral Clock Enable 1, UART1 */
+  CLK_PERIPHERAL_UART1 = (uint8_t)0x02, /*!< Peripheral Clock Enable 1, T_UART1 */
 #else
-  CLK_PERIPHERAL_UART1 = (uint8_t)0x03, /*!< Peripheral Clock Enable 1, UART1 */
+  CLK_PERIPHERAL_UART1 = (uint8_t)0x03, /*!< Peripheral Clock Enable 1, T_UART1 */
 #endif
   CLK_PERIPHERAL_UART2 = (uint8_t)0x03,  /*!< Peripheral Clock Enable 1, UART2 */
   CLK_PERIPHERAL_UART3 = (uint8_t)0x03,  /*!< Peripheral Clock Enable 1, UART3 */

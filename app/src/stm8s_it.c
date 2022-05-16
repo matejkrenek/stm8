@@ -138,17 +138,17 @@ onInterrupt(EXTI_PORTC_IRQHandler, 5)
      */
 }
 
-/**
- * @brief  External Interrupt PORTD Interrupt routine
- * @param  None
- * @retval None
- */
-onInterrupt(EXTI_PORTD_IRQHandler, 6)
-{
-    /* In order to detect unexpected events during development,
-     * it is recommended to set a breakpoint on the following instruction.
-     */
-}
+// /**
+//  * @brief  External Interrupt PORTD Interrupt routine
+//  * @param  None
+//  * @retval None
+//  */
+// onInterrupt(EXTI_PORTD_IRQHandler, 6)
+// {
+//     /* In order to detect unexpected events during development,
+//      * it is recommended to set a breakpoint on the following instruction.
+//      */
+// }
 
 onInterrupt(EXTI_PORTE_IRQHandler, 7)
 {
@@ -317,7 +317,7 @@ onInterrupt(TIM3_CAP_COM_IRQHandler, 16)
     defined(STM8S003) || defined(STM8S001) || defined(STM8AF62Ax) || defined(STM8AF52Ax) || defined(STM8S903)
 
 /**
- * @brief  UART1 TX Interrupt routine
+ * @brief  T_UART1 TX Interrupt routine
  * @param  None
  * @retval None
  */
@@ -329,7 +329,7 @@ onInterrupt(UART1_TX_IRQHandler, 17)
 }
 
 /**
- * @brief  UART1 RX Interrupt routine
+ * @brief  T_UART1 RX Interrupt routine
  * @param  None
  * @retval None
  */

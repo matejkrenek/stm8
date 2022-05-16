@@ -621,7 +621,7 @@ typedef struct CLK_struct
 #define CLK_PCKENR1_TIM6 ((uint8_t)0x10)  /*!< Timer 6 clock enable */
 #define CLK_PCKENR1_UART3 ((uint8_t)0x08) /*!< UART3 clock enable */
 #define CLK_PCKENR1_UART2 ((uint8_t)0x08) /*!< UART2 clock enable */
-#define CLK_PCKENR1_UART1 ((uint8_t)0x04) /*!< UART1 clock enable */
+#define CLK_PCKENR1_UART1 ((uint8_t)0x04) /*!< T_UART1 clock enable */
 #define CLK_PCKENR1_SPI ((uint8_t)0x02)   /*!< T_SPI clock enable */
 #define CLK_PCKENR1_I2C ((uint8_t)0x01)   /*!< T_I2C clock enable */
 
@@ -1788,22 +1788,22 @@ typedef struct SPI_struct
 
 /*----------------------------------------------------------------------------*/
 /**
- * @brief  Universal Synchronous Asynchronous Receiver Transmitter (UART1)
+ * @brief  Universal Synchronous Asynchronous Receiver Transmitter (T_UART1)
  */
 
 typedef struct UART1_struct
 {
-  __IO uint8_t SR;   /*!< UART1 status register */
-  __IO uint8_t DR;   /*!< UART1 data register */
-  __IO uint8_t BRR1; /*!< UART1 baud rate register */
-  __IO uint8_t BRR2; /*!< UART1 DIV mantissa[11:8] SCIDIV fraction */
-  __IO uint8_t CR1;  /*!< UART1 control register 1 */
-  __IO uint8_t CR2;  /*!< UART1 control register 2 */
-  __IO uint8_t CR3;  /*!< UART1 control register 3 */
-  __IO uint8_t CR4;  /*!< UART1 control register 4 */
-  __IO uint8_t CR5;  /*!< UART1 control register 5 */
-  __IO uint8_t GTR;  /*!< UART1 guard time register */
-  __IO uint8_t PSCR; /*!< UART1 prescaler register */
+  __IO uint8_t SR;   /*!< T_UART1 status register */
+  __IO uint8_t DR;   /*!< T_UART1 data register */
+  __IO uint8_t BRR1; /*!< T_UART1 baud rate register */
+  __IO uint8_t BRR2; /*!< T_UART1 DIV mantissa[11:8] SCIDIV fraction */
+  __IO uint8_t CR1;  /*!< T_UART1 control register 1 */
+  __IO uint8_t CR2;  /*!< T_UART1 control register 2 */
+  __IO uint8_t CR3;  /*!< T_UART1 control register 3 */
+  __IO uint8_t CR4;  /*!< T_UART1 control register 4 */
+  __IO uint8_t CR5;  /*!< T_UART1 control register 5 */
+  __IO uint8_t GTR;  /*!< T_UART1 guard time register */
+  __IO uint8_t PSCR; /*!< T_UART1 prescaler register */
 } UART1_TypeDef;
 
 /** @addtogroup UART1_Registers_Reset_Value
@@ -1845,12 +1845,12 @@ typedef struct UART1_struct
 
 #define UART1_CR1_R8 ((uint8_t)0x80)    /*!< Receive Data bit 8 */
 #define UART1_CR1_T8 ((uint8_t)0x40)    /*!< Transmit data bit 8 */
-#define UART1_CR1_UARTD ((uint8_t)0x20) /*!< UART1 Disable (for low power consumption) */
+#define UART1_CR1_UARTD ((uint8_t)0x20) /*!< T_UART1 Disable (for low power consumption) */
 #define UART1_CR1_M ((uint8_t)0x10)     /*!< Word length mask */
 #define UART1_CR1_WAKE ((uint8_t)0x08)  /*!< Wake-up method mask */
 #define UART1_CR1_PCEN ((uint8_t)0x04)  /*!< Parity Control Enable mask */
-#define UART1_CR1_PS ((uint8_t)0x02)    /*!< UART1 Parity Selection */
-#define UART1_CR1_PIEN ((uint8_t)0x01)  /*!< UART1 Parity Interrupt Enable mask */
+#define UART1_CR1_PS ((uint8_t)0x02)    /*!< T_UART1 Parity Selection */
+#define UART1_CR1_PIEN ((uint8_t)0x01)  /*!< T_UART1 Parity Interrupt Enable mask */
 
 #define UART1_CR2_TIEN ((uint8_t)0x80)  /*!< Transmitter Interrupt Enable mask */
 #define UART1_CR2_TCIEN ((uint8_t)0x40) /*!< Transmission Complete Interrupt Enable mask */
@@ -1871,7 +1871,7 @@ typedef struct UART1_struct
 #define UART1_CR4_LBDIEN ((uint8_t)0x40) /*!< LIN Break Detection Interrupt Enable mask */
 #define UART1_CR4_LBDL ((uint8_t)0x20)   /*!< LIN Break Detection Length mask */
 #define UART1_CR4_LBDF ((uint8_t)0x10)   /*!< LIN Break Detection Flag mask */
-#define UART1_CR4_ADD ((uint8_t)0x0F)    /*!< Address of the UART1 node mask */
+#define UART1_CR4_ADD ((uint8_t)0x0F)    /*!< Address of the T_UART1 node mask */
 
 #define UART1_CR5_SCEN ((uint8_t)0x20)  /*!< Smart Card Enable mask */
 #define UART1_CR5_NACK ((uint8_t)0x10)  /*!< Smart Card Nack Enable mask */
@@ -1890,18 +1890,18 @@ typedef struct UART1_struct
 
 typedef struct UART2_struct
 {
-  __IO uint8_t SR;   /*!< UART1 status register */
-  __IO uint8_t DR;   /*!< UART1 data register */
-  __IO uint8_t BRR1; /*!< UART1 baud rate register */
-  __IO uint8_t BRR2; /*!< UART1 DIV mantissa[11:8] SCIDIV fraction */
-  __IO uint8_t CR1;  /*!< UART1 control register 1 */
-  __IO uint8_t CR2;  /*!< UART1 control register 2 */
-  __IO uint8_t CR3;  /*!< UART1 control register 3 */
-  __IO uint8_t CR4;  /*!< UART1 control register 4 */
-  __IO uint8_t CR5;  /*!< UART1 control register 5 */
-  __IO uint8_t CR6;  /*!< UART1 control register 6 */
-  __IO uint8_t GTR;  /*!< UART1 guard time register */
-  __IO uint8_t PSCR; /*!< UART1 prescaler register */
+  __IO uint8_t SR;   /*!< T_UART1 status register */
+  __IO uint8_t DR;   /*!< T_UART1 data register */
+  __IO uint8_t BRR1; /*!< T_UART1 baud rate register */
+  __IO uint8_t BRR2; /*!< T_UART1 DIV mantissa[11:8] SCIDIV fraction */
+  __IO uint8_t CR1;  /*!< T_UART1 control register 1 */
+  __IO uint8_t CR2;  /*!< T_UART1 control register 2 */
+  __IO uint8_t CR3;  /*!< T_UART1 control register 3 */
+  __IO uint8_t CR4;  /*!< T_UART1 control register 4 */
+  __IO uint8_t CR5;  /*!< T_UART1 control register 5 */
+  __IO uint8_t CR6;  /*!< T_UART1 control register 6 */
+  __IO uint8_t GTR;  /*!< T_UART1 guard time register */
+  __IO uint8_t PSCR; /*!< T_UART1 prescaler register */
 } UART2_TypeDef;
 
 /** @addtogroup UART2_Registers_Reset_Value
@@ -2675,7 +2675,7 @@ typedef struct CFG_struct
 
 #if defined(STM8S208) || defined(STM8S207) || defined(STM8S007) || defined(STM8S103) || \
     defined(STM8S003) || defined(STM8S001) || defined(STM8S903) || defined(STM8AF52Ax) || defined(STM8AF62Ax)
-#define UART1 ((UART1_TypeDef *)UART1_BaseAddress)
+#define T_UART1 ((UART1_TypeDef *)UART1_BaseAddress)
 #endif /* (STM8S208) || (STM8S207) || (STM8S007) || (STM8S103) || (STM8S003) || (STM8S001) || (STM8S903) || (STM8AF52Ax) || (STM8AF62Ax) */
 
 #if defined(STM8S105) || defined(STM8S005) || defined(STM8AF626x)

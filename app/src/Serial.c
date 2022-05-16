@@ -3,6 +3,7 @@
 
 const Serial_Module Serial = {
     .begin = Serial_Begin,
+    .write = printf,
 };
 
 void Serial_Begin(uint32_t BaudRate)
@@ -15,7 +16,7 @@ void Serial_Begin(uint32_t BaudRate)
 
 int putchar(int c)
 {
-    UART1->DR = c;
+    T_UART1->DR = c;
 
     while (!UART1_GetFlagStatus(UART1_FLAG_TC))
         ;
