@@ -187,7 +187,7 @@ typedef enum
 typedef struct
 {
   void (*init)(uint32_t, UART1_WordLength_TypeDef, UART1_StopBits_TypeDef, UART1_Parity_TypeDef, UART1_SyncMode_TypeDef, UART1_Mode_TypeDef);
-  void (*deini)();
+  void (*deinit)();
 } UART1_Module;
 
 /**

@@ -42,7 +42,7 @@
 extern const UART1_Module UART1 = {
     .deinit = UART1_DeInit,
     .init = UART1_Init,
-}
+};
 /**
  * @addtogroup UART1_Public_Functions
  * @{
@@ -53,8 +53,7 @@ extern const UART1_Module UART1 = {
  * @param  None
  * @retval None
  */
-void
-UART1_DeInit(void)
+void UART1_DeInit(void)
 {
   /* Clear the Idle Line Detected bit in the status register by a read
   to the UART1_SR register followed by a Read to the UART1_DR register */
