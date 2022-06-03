@@ -4,6 +4,7 @@
         "liquidcrystal_i2c.h": "c",
         "serial.h": "c",
         "dht.h": "c",
-        "type_traits": "c"
+        "type_traits": "c",
+        "encoder.h": "c"
     }
 }

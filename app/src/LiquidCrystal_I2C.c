@@ -71,7 +71,7 @@ void LiquidCrystal_I2C_Init(uint8_t address, uint8_t cols, uint8_t rows)
     delay.us(150);
     LCD.write4bits(0x02 << 4);
     LCD.command(LCD_FUNCTIONSET | _lcd_displayfunction);
-    _lcd_displaycontrol = LCD_DISPLAYON | LCD_CURSORON | LCD_BLINKOFF;
+    _lcd_displaycontrol = LCD_DISPLAYON | LCD_CURSOROFF | LCD_BLINKOFF;
     LCD.display();
     LCD.clear();
     _lcd_displaymode = LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT;
