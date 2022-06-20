@@ -261,7 +261,7 @@ void GPIO_ExternalPullUpConfig(GPIO_TypeDef *GPIOx, GPIO_Pin GPIO_Pin, Functiona
  */
 const GPIO_Module GPIO = {
     .init = GPIO_Init,
-    .deinit = GPIO_DeInitAll,
+    .deinit = GPIO_DeInit,
     .write = GPIO_Write,
     .writeLow = GPIO_WriteLow,
     .writeHigh = GPIO_WriteHigh,

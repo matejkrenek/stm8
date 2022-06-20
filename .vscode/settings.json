@@ -1,10 +1,5 @@
 {
     "files.associations": {
-        "stdio.h": "c",
-        "liquidcrystal_i2c.h": "c",
-        "serial.h": "c",
-        "dht.h": "c",
-        "type_traits": "c",
-        "encoder.h": "c"
+        "UI.C": "cpp"
     }
 }

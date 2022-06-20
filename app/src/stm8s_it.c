@@ -119,7 +119,19 @@ onInterrupt(EXTI_PORTA_IRQHandler, 3)
  * @param  None
  * @retval None
 //  */
-// onInterrupt(EXTI_PORTB_IRQHandler, 4)
+onInterrupt(EXTI_PORTB_IRQHandler, 4)
+{
+    /* In order to detect unexpected events during development,
+     * it is recommended to set a breakpoint on the following instruction.
+     */
+}
+
+/**
+ * @brief  External Interrupt PORTC Interrupt routine
+ * @param  None
+ * @retval None
+ */
+// onInterrupt(EXTI_PORTC_IRQHandler, 5)
 // {
 //     /* In order to detect unexpected events during development,
 //      * it is recommended to set a breakpoint on the following instruction.
@@ -127,28 +139,16 @@ onInterrupt(EXTI_PORTA_IRQHandler, 3)
 // }
 
 /**
- * @brief  External Interrupt PORTC Interrupt routine
- * @param  None
- * @retval None
- */
-onInterrupt(EXTI_PORTC_IRQHandler, 5)
-{
-    /* In order to detect unexpected events during development,
-     * it is recommended to set a breakpoint on the following instruction.
-     */
-}
-
-/**
  * @brief  External Interrupt PORTD Interrupt routine
  * @param  None
  * @retval None
  */
-onInterrupt(EXTI_PORTD_IRQHandler, 6)
-{
-    /* In order to detect unexpected events during development,
-     * it is recommended to set a breakpoint on the following instruction.
-     */
-}
+// onInterrupt(EXTI_PORTD_IRQHandler, 6)
+// {
+//     /* In order to detect unexpected events during development,
+//      * it is recommended to set a breakpoint on the following instruction.
+//      */
+// }
 
 onInterrupt(EXTI_PORTE_IRQHandler, 7)
 {

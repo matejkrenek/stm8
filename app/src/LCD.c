@@ -1,5 +1,5 @@
-#include "stm8s.h"
-#include "LiquidCrystal_I2C.h"
+#include "LCD.h"
+#include "Serial.h"
 
 uint8_t _lcd_address;
 uint8_t _lcd_cols;
@@ -11,21 +11,6 @@ uint8_t _lcd_displaymode;
 Pin *SDA;
 Pin *SCL;
 
-// When the display powers up, it is configured as follows:
-//
-// 1. Display clear
-// 2. Function set:
-//    DL = 1; 8-bit interface data
-//    N = 0; 1-line display
-//    F = 0; 5x8 dot character font
-// 3. Display on/off control:
-//    D = 0; Display off
-//    C = 0; Cursor off
-//    B = 0; Blinking off
-// 4. Entry mode set:
-//    I/D = 1; Increment by 1
-//    S = 0; No shift
-//
 LiquidCrystal_I2C_Module LCD = {
     .init = LiquidCrystal_I2C_Init,
     .expanderWrite = LiquidCrystal_I2C_ExpanderWrite,
@@ -56,8 +41,7 @@ void LiquidCrystal_I2C_Init(uint8_t address, uint8_t cols, uint8_t rows)
     SDA = GPIO.init(GPIOE, PIN_2, OUTPUT_PP_HIGH_FAST);
     SCL = GPIO.init(GPIOE, PIN_1, OUTPUT_PP_HIGH_FAST);
 
-    I2C.deinit();
-    I2C.init(100000, _lcd_address, I2C_DUTYCYCLE_2, I2C_ACK_CURR, I2C_ADDMODE_7BIT, CLK.getFrequency() / 1000000);
+    I2C.init(100000, 0x00, I2C_DUTYCYCLE_2, I2C_ACK_CURR, I2C_ADDMODE_7BIT, CLK.getFrequency() / 1000000);
     I2C.enable();
 
     delay.ms(50);

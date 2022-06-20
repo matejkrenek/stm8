@@ -1,23 +1,34 @@
 #include "stm8s.h"
 #include "Serial.h"
-#include "encoder.h"
-#include "LiquidCrystal_I2C.h"
+#include "DSRTC.h"
+#include "UI.h"
+#include "Encoder.h"
+#include "LCD.h"
 
-uint8_t counter = 0;
-uint8_t counter_str[10];
+void up()
+{
+    Serial.write("up\n");
+}
+
+void down()
+{
+    Serial.write("down\n");
+}
+
+void click()
+{
+    Serial.write("clicker\n");
+}
 
 void main(void)
 {
     CLK.HSI(HSIDIV1);
     Serial.begin(9600);
     LCD.init(0x26, 16, 2);
-    Encoder.init();
+    Encoder.init(up, down, click);
+    UI.render();
 
     while (1)
     {
-        sprintf(counter_str, "%u", Encoder.read());
-        LCD.clear();
-        LCD.setCursor(0, 0);
-        LCD.print(counter_str);
     }
 }

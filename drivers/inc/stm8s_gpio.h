@@ -106,7 +106,7 @@ typedef struct
 typedef struct
 {
   Pin *(*init)(GPIO_TypeDef *, GPIO_Pin, GPIO_Mode);
-  void (*deinit)();
+  void (*deinit)(GPIO_TypeDef *);
   void (*write)(Pin *, uint8_t);
   void (*writeLow)(Pin *);
   void (*writeHigh)(Pin *);

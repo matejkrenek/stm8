@@ -1,6 +1,8 @@
 #ifndef __LiquidCrystal_I2C_H
 #define __LiquidCrystal_I2C_H
 
+#include "stm8s.h"
+
 #define LCD_CLEARDISPLAY 0x01
 #define LCD_RETURNHOME 0x02
 #define LCD_ENTRYMODESET 0x04
@@ -46,6 +48,9 @@
 #define Rw 0x02 // Read/Write bit
 #define Rs 0x01 // Register select bit
 
+/**
+ * @brief  Definition of the LiquidCrystal_I2C struct to communicate with LCD via I2C.
+ */
 typedef struct
 {
     void (*init)(uint8_t, uint8_t, uint8_t);

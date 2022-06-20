@@ -1,6 +1,9 @@
 #ifndef __Serial_H
 #define __Serial_H
 
+/**
+ * @brief  Definition of the Serial struct to communicate with serial monitor.
+ */
 typedef struct
 {
     void (*begin)(uint32_t);

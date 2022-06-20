@@ -6,6 +6,11 @@ const Serial_Module Serial = {
     .write = printf,
 };
 
+/**
+ * @brief  Configure Serial monitor.
+ * @param  BaudRate : Speed of serial monitor.
+ * @retval None
+ */
 void Serial_Begin(uint32_t BaudRate)
 {
     CLK.peripheralEnable(CLK_PERIPHERAL_UART1);
@@ -14,6 +19,11 @@ void Serial_Begin(uint32_t BaudRate)
     delay.ms(50);
 }
 
+/**
+ * @brief  Rewrite puchar function.
+ * @param  c : characters.
+ * @retval None
+ */
 int putchar(int c)
 {
     T_UART1->DR = c;
