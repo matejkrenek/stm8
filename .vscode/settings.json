@@ -1,5 +1,11 @@
 {
     "files.associations": {
-        "UI.C": "cpp"
+        "UI.C": "cpp",
+        "stm8s.h": "c",
+        "serial.h": "c",
+        "lcd.h": "c",
+        "encoder.h": "c",
+        "ui.h": "c",
+        "dsrtc.h": "c"
     }
 }

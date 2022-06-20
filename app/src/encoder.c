@@ -1,4 +1,5 @@
 #include "encoder.h"
+#include "timer.h"
 #include "Serial.h"
 
 Pin *ENCODER_CLK;
@@ -10,8 +11,7 @@ bool ENCODER_CHANGED;
 
 bool PREV_STATE;
 bool CURR_STATE;
-bool BUTTON_PREV_STATE;
-bool BUTTON_CURR_STATE;
+uint16_t BUTTON_LAST_PRESS = 0;
 
 Encoder_Module Encoder = {
     .init = Encoder_Init,
@@ -22,7 +22,11 @@ Encoder_Module Encoder = {
 
 onInterrupt(EXTI_PORTD_IRQHandler, 6)
 {
-    Serial.write("pressed\n");
+    if ((timer.milis() - BUTTON_LAST_PRESS) > 250)
+    {
+        Encoder.click();
+        BUTTON_LAST_PRESS = timer.milis();
+    }
 }
 
 onInterrupt(EXTI_PORTC_IRQHandler, 5)
@@ -56,6 +60,7 @@ void Encoder_Init(void (*left)(), void (*right)(), void (*click)())
     ITC.setPriority(ITC_IRQ_GPIOC, LEVEL_1);
     ITC.setPriority(ITC_IRQ_GPIOD, LEVEL_1);
     ITC.enable();
+    timer.init();
 
     PREV_STATE = GPIO.read(ENCODER_CLK);
     Encoder.left = left;
