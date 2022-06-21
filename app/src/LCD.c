@@ -151,6 +151,7 @@ void LiquidCrystal_I2C_Backlight()
 
 void LiquidCrystal_I2C_CreateChar(uint8_t location, uint8_t charmap[])
 {
+
     location &= 0x7;
     LCD.command(LCD_SETCGRAMADDR | (location << 3));
     for (int i = 0; i < 8; i++)

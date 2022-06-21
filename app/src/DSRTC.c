@@ -142,13 +142,7 @@ DateTime *DSRTC_DateTime()
     _dsrtc_datetime.month = bcdToDec(buffer[5]);
     _dsrtc_datetime.year = bcdToDec(buffer[6]);
 
-    Serial.write("%u\n", _dsrtc_datetime.seconds);
-    Serial.write("%u\n", _dsrtc_datetime.minutes);
-    Serial.write("%u\n", _dsrtc_datetime.hours);
-    Serial.write("%u\n", _dsrtc_datetime.dayOfWeek);
-    Serial.write("%u\n", _dsrtc_datetime.dayOfMonth);
-    Serial.write("%u\n", _dsrtc_datetime.month);
-    Serial.write("%u\n", _dsrtc_datetime.year);
+    Serial.write("datetime requrest");
 
     return &_dsrtc_datetime;
 }

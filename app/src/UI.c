@@ -1,18 +1,13 @@
 #include "UI.h"
-#include "DSRTC.h"
 #include "Serial.h"
 
 int _ui_router_current = 0;
+bool _ui_rendered = FALSE;
 int _ui_router_previous = 0;
 int _ui_scrollbar_current = 0;
 int _ui_pointer_current = 0;
-int _ui_links_count = 0;
-
-char _ui1_links[][20] = {"Settings", "Back"};
-char _ui2_links[][20] = {"LCD", "Datetime", "Alarm", "Back"};
-char _ui3_links[][20] = {"Backlight: ", "Cursor: ", "Blink: ", "Back"};
-char _ui4_links[][20] = {"Time: ", "Date: ", "Back"};
-char _ui5_links[][20] = {"Every: ", "Volume: ", "Freq: ", "Back"};
+int _ui_rows_count = 0;
+bool _ui_was_rendered = FALSE;
 
 uint8_t chevron[8] = {
     0b10000,
@@ -49,15 +44,19 @@ uint8_t calendar[8] = {
 
 UI_Module UI = {
     .init = UI_Init,
-    .pointer = UI_Pointer,
-    .linksCount = UI_LinksCount,
-    .setPointer = UI_SetPointer,
-    .setScrollbar = UI_SetScrollbar,
+    .rendered = UI_Rendered,
+    .setRendered = UI_SetRendered,
+    .wasRendered = UI_WasRendered,
+    .setWasRendered = UI_SetWasRendered,
+    .rows = UI_Rows,
+    .setRows = UI_SetRows,
+    .redirect = UI_Redirect,
     .scrollbar = UI_Scrollbar,
-    .render = UI_Router_Render,
+    .setScrollbar = UI_SetScrollbar,
+    .pointer = UI_Pointer,
+    .setPointer = UI_SetPointer,
     .Router.current = UI_Router_Current,
     .Router.previous = UI_Router_Previous,
-    .redirect = UI_Router_Redirect,
 };
 
 void UI_Init()
@@ -65,12 +64,38 @@ void UI_Init()
     LCD.createChar(1, chevron);
     LCD.createChar(2, clock);
     LCD.createChar(3, calendar);
-    UI.render();
+    UI.redirect(0);
+    UI.setWasRendered(FALSE);
 }
 
-int UI_LinksCount()
+bool UI_Rendered()
 {
-    return _ui_links_count;
+    return _ui_rendered;
+}
+
+void UI_SetRendered(bool value)
+{
+    _ui_rendered = value;
+}
+
+bool UI_WasRendered()
+{
+    return _ui_was_rendered;
+}
+
+void UI_SetWasRendered(bool value)
+{
+    _ui_was_rendered = value;
+}
+
+void UI_SetRows(int rows)
+{
+    _ui_rows_count = rows;
+}
+
+int UI_Rows()
+{
+    return _ui_rows_count;
 }
 
 int UI_Pointer()
@@ -93,101 +118,12 @@ int UI_Router_Previous()
     return _ui_router_previous;
 }
 
-void UI_Router_Redirect(int route)
+void UI_Redirect(int route)
 {
     _ui_scrollbar_current = 0;
     _ui_pointer_current = 0;
     _ui_router_previous = _ui_router_current;
     _ui_router_current = route;
-}
-
-void UI_Router_Render()
-{
-    switch (_ui_router_current)
-    {
-    case 0:
-        LCD.clear();
-        LCD.setCursor(0, 0);
-        LCD.printChar(2);
-        LCD.print(" 12:22:55");
-        LCD.setCursor(0, 1);
-        LCD.printChar(3);
-        LCD.print(" 27.09.2022");
-        break;
-
-    case 1:
-        _ui_links_count = 2;
-        LCD.clear();
-        for (int i = 0; i < 2; i++)
-        {
-            LCD.setCursor(1, i);
-            LCD.print(_ui1_links[i + UI.scrollbar()]);
-        }
-
-        LCD.setCursor(0, UI.pointer());
-        LCD.printChar(1);
-
-        break;
-
-    case 2:
-        _ui_links_count = 4;
-        LCD.clear();
-        for (int i = 0; i < 2; i++)
-        {
-            LCD.setCursor(1, i);
-            LCD.print(_ui2_links[i + UI.scrollbar()]);
-        }
-
-        LCD.setCursor(0, UI.pointer());
-        LCD.printChar(1);
-
-        break;
-
-    case 3:
-        _ui_links_count = 4;
-        LCD.clear();
-        for (int i = 0; i < 2; i++)
-        {
-            LCD.setCursor(1, i);
-            LCD.print(_ui3_links[i + UI.scrollbar()]);
-        }
-
-        LCD.setCursor(0, UI.pointer());
-        LCD.printChar(1);
-
-        break;
-
-    case 4:
-        _ui_links_count = 3;
-        LCD.clear();
-        for (int i = 0; i < 2; i++)
-        {
-            LCD.setCursor(1, i);
-            LCD.print(_ui4_links[i + UI.scrollbar()]);
-        }
-
-        LCD.setCursor(0, UI.pointer());
-        LCD.printChar(1);
-
-        break;
-
-    case 5:
-        _ui_links_count = 4;
-        LCD.clear();
-        for (int i = 0; i < 2; i++)
-        {
-            LCD.setCursor(1, i);
-            LCD.print(_ui5_links[i + UI.scrollbar()]);
-        }
-
-        LCD.setCursor(0, UI.pointer());
-        LCD.printChar(1);
-
-        break;
-
-    default:
-        break;
-    };
 }
 
 void UI_SetScrollbar(int value)
