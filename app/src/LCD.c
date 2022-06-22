@@ -5,6 +5,8 @@ uint8_t _lcd_address;
 uint8_t _lcd_cols;
 uint8_t _lcd_rows;
 uint8_t _lcd_backlight;
+uint8_t _lcd_cursor;
+uint8_t _lcd_blink;
 uint8_t _lcd_displayfunction;
 uint8_t _lcd_displaycontrol;
 uint8_t _lcd_displaymode;
@@ -24,8 +26,15 @@ LiquidCrystal_I2C_Module LCD = {
     .home = LiquidCrystal_I2C_Home,
     .noBacklight = LiquidCrystal_I2C_NoBacklight,
     .backlight = LiquidCrystal_I2C_Backlight,
+    .getBacklight = LiquidCrystal_I2C_GetBacklight,
     .createChar = LiquidCrystal_I2C_CreateChar,
     .setCursor = LiquidCrystal_I2C_SetCursor,
+    .getCursor = LiquidCrystal_I2C_GetCursor,
+    .noCursor = LiquidCrystal_I2C_NoCursor,
+    .cursor = LiquidCrystal_I2C_Cursor,
+    .getBlink = LiquidCrystal_I2C_GetBlink,
+    .noBlink = LiquidCrystal_I2C_NoBlink,
+    .blink = LiquidCrystal_I2C_Blink,
     .print = LiquidCrystal_I2C_Print,
     .printChar = LiquidCrystal_I2C_PrintChar,
 };
@@ -38,12 +47,6 @@ void LiquidCrystal_I2C_Init(uint8_t address, uint8_t cols, uint8_t rows)
     _lcd_backlight = LCD_BACKLIGHT;
     _lcd_displayfunction = LCD_4BITMODE | LCD_2LINE | LCD_5x8DOTS;
 
-    SDA = GPIO.init(GPIOE, PIN_2, OUTPUT_PP_HIGH_FAST);
-    SCL = GPIO.init(GPIOE, PIN_1, OUTPUT_PP_HIGH_FAST);
-
-    I2C.init(100000, 0x00, I2C_DUTYCYCLE_2, I2C_ACK_CURR, I2C_ADDMODE_7BIT, CLK.getFrequency() / 1000000);
-    I2C.enable();
-
     delay.ms(50);
     LCD.expanderWrite(_lcd_backlight);
     delay.ms(1000);
@@ -55,7 +58,7 @@ void LiquidCrystal_I2C_Init(uint8_t address, uint8_t cols, uint8_t rows)
     delay.us(150);
     LCD.write4bits(0x02 << 4);
     LCD.command(LCD_FUNCTIONSET | _lcd_displayfunction);
-    _lcd_displaycontrol = LCD_DISPLAYON | LCD_CURSOROFF | LCD_BLINKOFF;
+    _lcd_displaycontrol = LCD_DISPLAYON;
     LCD.display();
     LCD.clear();
     _lcd_displaymode = LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT;
@@ -149,6 +152,11 @@ void LiquidCrystal_I2C_Backlight()
     LCD.expanderWrite(0);
 }
 
+bool LiquidCrystal_I2C_GetBacklight()
+{
+    return _lcd_backlight == LCD_BACKLIGHT;
+}
+
 void LiquidCrystal_I2C_CreateChar(uint8_t location, uint8_t charmap[])
 {
 
@@ -170,6 +178,44 @@ void LiquidCrystal_I2C_SetCursor(uint8_t col, uint8_t row)
     }
 
     LCD.command(LCD_SETDDRAMADDR | (col + row_offsets[row]));
+}
+
+bool LiquidCrystal_I2C_GetCursor()
+{
+    return _lcd_cursor == LCD_CURSORON;
+}
+
+void LiquidCrystal_I2C_NoCursor()
+{
+    _lcd_cursor = LCD_CURSOROFF;
+    _lcd_displaycontrol &= ~LCD_CURSORON;
+    LCD.command(LCD_DISPLAYCONTROL | _lcd_displaycontrol);
+}
+
+void LiquidCrystal_I2C_Cursor()
+{
+    _lcd_cursor = LCD_CURSORON;
+    _lcd_displaycontrol |= _lcd_cursor;
+    LCD.command(LCD_DISPLAYCONTROL | _lcd_displaycontrol);
+}
+
+bool LiquidCrystal_I2C_GetBlink()
+{
+    return _lcd_blink == LCD_BLINKON;
+}
+
+void LiquidCrystal_I2C_NoBlink()
+{
+    _lcd_blink = LCD_BLINKOFF;
+    _lcd_displaycontrol &= ~LCD_BLINKON;
+    LCD.command(LCD_DISPLAYCONTROL | _lcd_displaycontrol);
+}
+
+void LiquidCrystal_I2C_Blink()
+{
+    _lcd_blink = LCD_BLINKON;
+    _lcd_displaycontrol |= _lcd_blink;
+    LCD.command(LCD_DISPLAYCONTROL | _lcd_displaycontrol);
 }
 
 void LiquidCrystal_I2C_Print(char *string)

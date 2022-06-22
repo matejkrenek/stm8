@@ -18,6 +18,11 @@ typedef struct
     void (*setScrollbar)(int);
     int (*pointer)();
     void (*setPointer)(int);
+    void (*boolean)(uint8_t *, bool);
+    void (*timepicker)(uint8_t *, uint8_t *, uint8_t *, uint8_t *);
+    void (*datepicker)(uint8_t *, uint8_t *, uint8_t *, uint8_t *);
+    void (*edit)(int);
+    int (*editing)();
     union
     {
         int (*current)();
@@ -38,8 +43,16 @@ bool UI_WasRendered();
 void UI_SetRows(int rows);
 void UI_SetWasRendered(bool value);
 void UI_Redirect(int route);
+
 int UI_Router_Current();
 int UI_Router_Previous();
+
+void UI_Boolean(uint8_t *label, bool value);
+void UI_Timepicker(uint8_t *label, uint8_t *hours, uint8_t *minutes, uint8_t *seconds);
+void UI_Datepicker(uint8_t *label, uint8_t *dayOfMonth, uint8_t *month, uint8_t *year);
+
+void UI_Edit(int id);
+int UI_Editing();
 
 extern UI_Module UI;
 

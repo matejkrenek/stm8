@@ -1,4 +1,5 @@
 #include "DSRTC.h"
+#include "LCD.h"
 #include "Serial.h"
 
 uint8_t _dsrtc_address;
@@ -20,18 +21,15 @@ uint8_t bcdToDec(uint8_t val)
 DSRTC_Module DSRTC = {
     .init = DSRTC_Init,
     .read = DSRTC_Read,
+    .write = DSRTC_Write,
     .dateTime = DSRTC_DateTime,
+    .setDateTime = DSRTC_SetDateTime,
 };
 
 void DSRTC_Init(uint8_t address)
 {
     _dsrtc_address = address << 1;
 
-    DSRTC_SDA = GPIO.init(GPIOE, PIN_2, OUTPUT_PP_LOW_FAST);
-    DSRTC_SCL = GPIO.init(GPIOE, PIN_1, OUTPUT_PP_LOW_FAST);
-
-    I2C.init(100000, 0x00, I2C_DUTYCYCLE_2, I2C_ACK_CURR, I2C_ADDMODE_7BIT, CLK.getFrequency() / 1000000);
-    I2C.enable();
     delay.ms(50);
 }
 
@@ -129,6 +127,57 @@ void DSRTC_Read(uint8_t *buffer)
     I2C_AcknowledgeConfig(I2C_ACK_CURR);
 }
 
+void DSRTC_Write()
+{
+    while (I2C_GetFlagStatus(I2C_FLAG_BUSBUSY))
+        ;
+
+    I2C.start();
+
+    while (!I2C_CheckEvent(I2C_EVENT_MASTER_MODE_SELECT))
+        ;
+
+    I2C.sendAddress(_dsrtc_address, I2C_DIRECTION_TX);
+
+    while (!I2C_CheckEvent(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))
+        ;
+
+    I2C.sendData(0x00);
+
+    while (!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED))
+        ;
+    I2C.sendData(_dsrtc_datetime.seconds);
+
+    while (!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED))
+        ;
+    I2C.sendData(_dsrtc_datetime.minutes);
+
+    while (!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED))
+        ;
+    I2C.sendData(_dsrtc_datetime.hours);
+
+    while (!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED))
+        ;
+    I2C.sendData(_dsrtc_datetime.dayOfWeek);
+
+    while (!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED))
+        ;
+    I2C.sendData(_dsrtc_datetime.dayOfMonth);
+
+    while (!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED))
+        ;
+    I2C.sendData(_dsrtc_datetime.month);
+
+    while (!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED))
+        ;
+    I2C.sendData(_dsrtc_datetime.year);
+
+    while (!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED))
+        ;
+
+    I2C.stop();
+}
+
 DateTime *DSRTC_DateTime()
 {
     uint8_t buffer[200];
@@ -142,7 +191,18 @@ DateTime *DSRTC_DateTime()
     _dsrtc_datetime.month = bcdToDec(buffer[5]);
     _dsrtc_datetime.year = bcdToDec(buffer[6]);
 
-    Serial.write("datetime requrest");
-
     return &_dsrtc_datetime;
+}
+
+void DSRTC_SetDateTime(uint8_t seconds, uint8_t minutes, uint8_t hours, uint8_t dayOfWeek, uint8_t dayOfMonth, uint8_t month, uint8_t year)
+{
+    _dsrtc_datetime.seconds = decToBcd(seconds);
+    _dsrtc_datetime.minutes = decToBcd(minutes);
+    _dsrtc_datetime.hours = decToBcd(hours);
+    _dsrtc_datetime.dayOfWeek = decToBcd(dayOfWeek);
+    _dsrtc_datetime.dayOfMonth = decToBcd(dayOfMonth);
+    _dsrtc_datetime.month = decToBcd(month);
+    _dsrtc_datetime.year = decToBcd(year);
+
+    DSRTC.write();
 }
