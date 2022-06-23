@@ -170,8 +170,8 @@
 /*!< Used with memory Models for code higher than 64K */
 #define PointerAttr FAR
 #define MemoryAddressCast uint32_t
-#define _SDCC_BIGMEM_ /* SDCC patch: simplify sdcc && >64kB indicator over different SPLs */
-#endif                /* STM8S105 or STM8S103 or STM8S003 or STM8S001 or STM8S903 or STM8AF626x or STM8AF622x */
+//#define _SDCC_BIGMEM_ /* SDCC patch: simplify sdcc && >64kB indicator over different SPLs */
+#endif /* STM8S105 or STM8S103 or STM8S003 or STM8S001 or STM8S903 or STM8AF626x or STM8AF622x */
 
 /* Uncomment the line below to enable the FLASH functions execution from RAM */
 #if !defined(RAM_EXECUTION)

@@ -28,6 +28,12 @@ typedef struct
         int (*current)();
         int (*previous)();
     } Router;
+    void (*home)(uint8_t *, uint8_t *, uint8_t *, uint8_t *, uint8_t *, uint8_t *);
+    void (*menu)();
+    void (*settings)();
+    void (*lcd)();
+    void (*datetime)(uint8_t *, uint8_t *, uint8_t *, uint8_t *, uint8_t *, uint8_t *);
+    uint8_t *(*datetimeLink)(int);
 
 } UI_Module;
 
@@ -53,6 +59,13 @@ void UI_Datepicker(uint8_t *label, uint8_t *dayOfMonth, uint8_t *month, uint8_t 
 
 void UI_Edit(int id);
 int UI_Editing();
+
+void UI_Home(uint8_t *hours, uint8_t *minutes, uint8_t *seconds, uint8_t *dayOfMonth, uint8_t *month, uint8_t *year);
+void UI_Menu();
+void UI_Settings();
+void UI_LCD();
+void UI_Datetime(uint8_t *hours, uint8_t *minutes, uint8_t *seconds, uint8_t *dayOfMonth, uint8_t *month, uint8_t *year);
+uint8_t *UI_DatetimeLink(int index);
 
 extern UI_Module UI;
 

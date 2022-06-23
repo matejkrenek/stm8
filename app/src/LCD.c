@@ -47,6 +47,12 @@ void LiquidCrystal_I2C_Init(uint8_t address, uint8_t cols, uint8_t rows)
     _lcd_backlight = LCD_BACKLIGHT;
     _lcd_displayfunction = LCD_4BITMODE | LCD_2LINE | LCD_5x8DOTS;
 
+    SDA = GPIO.init(GPIOE, PIN_2, OUTPUT_PP_HIGH_FAST);
+    SCL = GPIO.init(GPIOE, PIN_1, OUTPUT_PP_HIGH_FAST);
+
+    I2C.init(100000, 0x00, I2C_DUTYCYCLE_2, I2C_ACK_CURR, I2C_ADDMODE_7BIT, CLK.getFrequency() / 1000000);
+    I2C.enable();
+
     delay.ms(50);
     LCD.expanderWrite(_lcd_backlight);
     delay.ms(1000);

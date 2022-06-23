@@ -30,7 +30,8 @@ uint32_t AT24C_Length()
 uint8_t AT24C_Read(uint16_t address)
 {
     uint8_t data;
-    s while (I2C_GetFlagStatus(I2C_FLAG_BUSBUSY));
+    while (I2C_GetFlagStatus(I2C_FLAG_BUSBUSY))
+        ;
 
     I2C.start();
 

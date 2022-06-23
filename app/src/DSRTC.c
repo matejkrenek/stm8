@@ -30,6 +30,12 @@ void DSRTC_Init(uint8_t address)
 {
     _dsrtc_address = address << 1;
 
+    DSRTC_SDA = GPIO.init(GPIOE, PIN_2, OUTPUT_PP_LOW_FAST);
+    DSRTC_SCL = GPIO.init(GPIOE, PIN_1, OUTPUT_PP_LOW_FAST);
+
+    I2C.init(100000, 0x00, I2C_DUTYCYCLE_2, I2C_ACK_CURR, I2C_ADDMODE_7BIT, CLK.getFrequency() / 1000000);
+    I2C.enable();
+
     delay.ms(50);
 }
 
